@@ -1,22 +1,29 @@
-import * as Haptics from 'expo-haptics'
 import { StyleSheet, Text, View } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+
 import type { ILevel } from '../model/levels'
 
-import PressableButton from '../../../shared/ui/buttons/PressableButton'
+import PressableButton from '../../../shared/ui/PressableButton'
 import vibrate from '../../../utils/vibrate'
+import { RootStackParamList } from '../../../app/navigation/types'
 
 export interface ISectionTabProps {
 	currentSection: ILevel['section']
 }
 
+type NavigationProp = StackNavigationProp<RootStackParamList, 'Theory'>
+
 const SectionTab = ({ currentSection }: ISectionTabProps) => {
+	const navigation = useNavigation<NavigationProp>()
+
 	const theoryPressIn = () => {
 		vibrate('light')
 	}
 
 	const theoryPress = (section: number) => {
 		console.log(`Нажатие теории для секции: ${section}`)
-		// Здесь будет логика перехода к теории
+		navigation.navigate('Theory', { theoryId: section })
 	}
 
 	return (

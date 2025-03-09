@@ -1,18 +1,8 @@
 import { useRef, useState } from 'react'
-import {
-	Button,
-	Pressable,
-	StyleSheet,
-	Text,
-	TextInput,
-	TouchableOpacity,
-	View,
-} from 'react-native'
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+
 import CheckButton from './CheckButton'
-import {
-	ITask,
-	ITaskTextInput,
-} from '../../../app/store/useTasksStore'
+import { ITask, ITaskTextInput } from '../../../app/store/useTasksStore'
 
 interface ITextInputTaskProps {
 	partialAnswer: ITaskTextInput['partialAnswer']
@@ -20,11 +10,7 @@ interface ITextInputTaskProps {
 	onComplete: (isCorrect: boolean) => void
 }
 
-const TextInputTask = ({
-	partialAnswer,
-	correctAnswer,
-	onComplete,
-}: ITextInputTaskProps) => {
+const TextInputTask = ({ partialAnswer, correctAnswer, onComplete }: ITextInputTaskProps) => {
 	const [inputText, setInputText] = useState('')
 
 	//
@@ -36,9 +22,7 @@ const TextInputTask = ({
 	//
 
 	const handleSubmit = () => {
-		onComplete(
-			inputText.trim().toLowerCase() === correctAnswer.toLowerCase(),
-		)
+		onComplete(inputText.trim().toLowerCase() === correctAnswer.toLowerCase())
 	}
 
 	return (
@@ -46,9 +30,7 @@ const TextInputTask = ({
 			<Pressable style={styles.content} onPress={handleTextPress}>
 				<Text style={styles.text}>
 					<Text>{partialAnswer[0]} </Text>
-					<Text style={[styles.text, styles.inputText]}>
-						{inputText}
-					</Text>
+					<Text style={[styles.text, styles.inputText]}>{inputText}</Text>
 					<Text> {partialAnswer[1]}</Text>
 				</Text>
 				<TextInput

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import sleep from '../../utils/sleep'
+import sleep from '../utils/sleep' 
 
 export interface ITaskWordPicker {
 	type: 'wordPicker'

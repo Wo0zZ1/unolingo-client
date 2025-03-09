@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
+import { SafeAreaView } from 'react-native'
+
 import { AppNavigator } from './src/app/navigation/AppNavigator'
-import { useUserStore } from './src/app/store/useUserStore'
-import { SafeAreaView, Text, View } from 'react-native'
+import { useUserStore } from './src/store/useUserStore'
+import LoadingScreen from './src/features/LoadingScreen'
 
 export default function App() {
 	const { fetchUserData, fetching } = useUserStore()
@@ -11,18 +13,7 @@ export default function App() {
 	}, [fetchUserData])
 
 	if (fetching) {
-		return (
-			<View
-				style={{
-					flex: 1,
-					alignItems: 'center',
-					justifyContent: 'center',
-				}}>
-				<Text style={{ fontSize: 30 }}>
-					Идёт загрузка аккаунта...
-				</Text>
-			</View>
-		)
+		return <LoadingScreen backBtn={false} title={'Загрузка приложения'} />
 	}
 	return (
 		<SafeAreaView style={{ flex: 1 }}>

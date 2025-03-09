@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native'
-import PressableButton from '../../../shared/ui/buttons/PressableButton'
-import vibrate from '../../../utils/vibrate'
 import { useCallback } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+
+import PressableButton from '../../../shared/ui/PressableButton'
+import vibrate from '../../../utils/vibrate'
 
 interface ICheckButtonProps {
 	onPress: () => void

@@ -7,14 +7,14 @@ import {
 } from 'react-native'
 import { useEffect, useRef, useState } from 'react'
 
-import { ILevel, mockLevels } from '../model/levels'
+import { ILevel, mockLevels } from './model/levels'
 
-import { groupLevels } from '../lib/groupLevels'
+import { groupLevels } from './lib/groupLevels'
 
-import SectionTab from './SectionTab'
-import LevelsSection from './LevelsSection'
-import PathLine from './PathLine'
-import { useDimensions } from '../../../hoocs'
+import SectionTab from './ui/SectionTab'
+import LevelsSection from './ui/LevelsSection'
+import PathLine from './ui/PathLine'
+import { useDimensions } from '../../hoocs'
 
 const SECTION_HEIGHT = 700
 

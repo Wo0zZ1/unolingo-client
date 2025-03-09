@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import sleep from '../../utils/sleep'
+import sleep from '../utils/sleep'
 
 export type UserState = {
 	level: number
@@ -24,9 +24,7 @@ export type UserActions = {
 export type UserStateStore = UserState & UserActions
 
 // TODO 10 уровней
-export const experienceToNextLevelMock = [
-	100, 200, 300, 400, 500, 600, 700, 800,
-]
+export const experienceToNextLevelMock = [100, 200, 300, 400, 500, 600, 700, 800]
 
 export const useUserStore = create<UserStateStore>(set => ({
 	level: 1,
@@ -46,19 +44,15 @@ export const useUserStore = create<UserStateStore>(set => ({
 			let newExperienceToNextLevel = prev.experienceToNextLevel
 
 			// TODO FIX
-			if (experience < newExperienceToNextLevel)
-				newExperienceToNextLevel -= experience
+			if (experience < newExperienceToNextLevel) newExperienceToNextLevel -= experience
 			else {
-				while (
-					newExperience >= experienceToNextLevelMock[newLevel - 1]
-				) {
+				while (newExperience >= experienceToNextLevelMock[newLevel - 1]) {
 					console.log('LEVEL UP')
 					newExperience -= experienceToNextLevelMock[newLevel - 1]
 
 					newLevel += 1
 
-					newExperienceToNextLevel =
-						experienceToNextLevelMock[newLevel - 1]
+					newExperienceToNextLevel = experienceToNextLevelMock[newLevel - 1]
 				}
 				newExperienceToNextLevel -= newExperience
 			}
@@ -74,8 +68,7 @@ export const useUserStore = create<UserStateStore>(set => ({
 
 	setExperience: experience => set({ experience }),
 	setExperienceTotal: experienceTotal => set({ experienceTotal }),
-	setExperienceToNextLevel: experienceToNextLevel =>
-		set({ experienceToNextLevel }),
+	setExperienceToNextLevel: experienceToNextLevel => set({ experienceToNextLevel }),
 	setCreatedAt: createdAt => set({ createdAt }),
 
 	// Метод для загрузки данных с сервера

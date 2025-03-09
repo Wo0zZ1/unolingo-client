@@ -4,9 +4,7 @@ export type RootStackParamList = {
 	MainTabs: undefined
 	LevelPlay: { levelId: number }
 	LevelStats: undefined
+	Theory: { theoryId: number }
 }
 
-export type NavigationProp = StackNavigationProp<
-	RootStackParamList,
-	'MainTabs'
->
+export type NavigationProp = StackNavigationProp<RootStackParamList, 'MainTabs'>

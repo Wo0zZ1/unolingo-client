@@ -1,14 +1,10 @@
 import * as Haptics from 'expo-haptics'
 import { StyleSheet, View } from 'react-native'
 
-import PressableButton from '../../../shared/ui/buttons/PressableButton'
+import PressableButton from '../../../shared/ui/PressableButton'
 import { ILevel } from '../model/levels'
-import { StackNavigationProp } from '@react-navigation/stack'
-import {
-	NavigationProp,
-	RootStackParamList,
-} from '../../../app/navigation/types'
 import { useNavigation } from '@react-navigation/native'
+import { NavigationProp } from '../../../navigation/types'
 
 type TPosition = 'left' | 'mid' | 'right'
 
@@ -26,7 +22,6 @@ const LevelCircle = ({ level, position }: ILevelCircleProps) => {
 
 	const circlePress = () => {
 		console.log(`Заупск  уровня с id: ${level.id}`)
-		// Здесь будет логика перехода к прохождению уровня
 		navigation.navigate('LevelPlay', { levelId: level.id })
 	}
 

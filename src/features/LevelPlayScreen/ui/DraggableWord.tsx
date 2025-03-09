@@ -1,15 +1,9 @@
 import * as Haptics from 'expo-haptics'
-
 import { StyleSheet, Text, View } from 'react-native'
-import {
-	Gesture,
-	GestureDetector,
-} from 'react-native-gesture-handler'
-import Animated, {
-	useAnimatedStyle,
-	useSharedValue,
-} from 'react-native-reanimated'
-import PressableButton from '../../../shared/ui/buttons/PressableButton'
+import { Gesture, GestureDetector } from 'react-native-gesture-handler'
+import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
+
+import PressableButton from '../../../shared/ui/PressableButton'
 
 interface IDraggableWordProps {
 	word: string
@@ -34,10 +28,7 @@ const DraggableWord = ({ onSelect, word }: IDraggableWordProps) => {
 		})
 
 	const animatedStyle = useAnimatedStyle(() => ({
-		transform: [
-			{ translateX: offsetX.value },
-			{ translateY: offsetY.value },
-		],
+		transform: [{ translateX: offsetX.value }, { translateY: offsetY.value }],
 	}))
 
 	return (

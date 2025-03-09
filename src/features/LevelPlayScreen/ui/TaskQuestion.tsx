@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
+
 import { ITask } from '../../../app/store/useTasksStore'
 
 interface ITaskQuestionProps {
@@ -8,9 +9,7 @@ interface ITaskQuestionProps {
 const TaskQuestion = ({ type, question }: ITaskQuestionProps) => (
 	<View style={styles.root}>
 		<Text style={styles.title}>
-			{type === 'wordPicker'
-				? 'Переведите предложение'
-				: 'Дополните перевод'}
+			{type === 'wordPicker' ? 'Переведите предложение' : 'Дополните перевод'}
 		</Text>
 		<View style={styles.cloud}>
 			<Text style={styles.text}>{question}</Text>
@@ -20,7 +19,6 @@ const TaskQuestion = ({ type, question }: ITaskQuestionProps) => (
 
 const styles = StyleSheet.create({
 	root: {
-		backgroundColor: '#f0f0f0',
 		borderRadius: 12,
 		alignItems: 'center',
 	},

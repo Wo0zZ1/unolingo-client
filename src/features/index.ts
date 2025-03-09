@@ -1,5 +1,7 @@
-import LevelMap from './LevelMap/ui/LevelMap'
-import LevelPlayScreen from './LevelPlay/ui/LevelPlayScreen'
+import LevelMapScreen from './LevelMapScreen'
+import LevelPlayScreen from './LevelPlayScreen/'
 import LevelStatsScreen from './LevelStatsScreen'
+import LoadingScreen from './LoadingScreen'
+import TheoryScreen from './TheoryScreen'
 
-export { LevelMap, LevelPlayScreen, LevelStatsScreen }
+export { LevelMapScreen, LevelPlayScreen, LevelStatsScreen, LoadingScreen, TheoryScreen }

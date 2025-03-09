@@ -1,40 +1,25 @@
-import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import {
-	createStackNavigator,
-	TransitionPresets,
-} from '@react-navigation/stack'
+import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack'
 
-import { LevelPlayScreen } from '../../features'
 import MainTabs from './MainTabs'
-import LevelStatsScreen from '../../features/LevelStatsScreen'
+import { LevelPlayScreen, LevelStatsScreen, TheoryScreen } from '../../features'
 
 const Stack = createStackNavigator()
+
+const defaultOptions: StackNavigationOptions = {
+	headerShown: false,
+	gestureEnabled: false,
+	detachPreviousScreen: true,
+	freezeOnBlur: true,
+}
 
 export const AppNavigator = () => (
 	<NavigationContainer>
 		<Stack.Navigator>
-			<Stack.Screen
-				name='MainTabs'
-				component={MainTabs}
-				options={{ headerShown: false, gestureEnabled: false }}
-			/>
-			<Stack.Screen
-				name='LevelPlay'
-				component={LevelPlayScreen}
-				options={{ headerShown: false, gestureEnabled: false }}
-			/>
-			<Stack.Screen
-				name='LevelStats'
-				component={LevelStatsScreen}
-				options={{
-					headerShown: false,
-					gestureEnabled: false,
-					detachPreviousScreen: true,
-					freezeOnBlur: true,
-					// ...TransitionPresets.ModalSlideFromBottomIOS,
-				}}
-			/>
+			<Stack.Screen name='MainTabs' component={MainTabs} options={defaultOptions} />
+			<Stack.Screen name='LevelPlay' component={LevelPlayScreen} options={defaultOptions} />
+			<Stack.Screen name='LevelStats' component={LevelStatsScreen} options={defaultOptions} />
+			<Stack.Screen name='Theory' component={TheoryScreen} options={defaultOptions} />
 		</Stack.Navigator>
 	</NavigationContainer>
 )

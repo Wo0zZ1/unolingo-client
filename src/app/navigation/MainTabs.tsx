@@ -1,9 +1,9 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { Ionicons } from '@expo/vector-icons'
 
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import { LevelMap } from '../../features'
 import { StyleSheet, Text, View } from 'react-native'
+import { LevelMapScreen } from '../../features'
 
 const Tab = createBottomTabNavigator()
 
@@ -36,16 +36,12 @@ const MainTabs = () => (
 	<Tab.Navigator
 		screenOptions={({ route }) => ({
 			tabBarIcon: ({ focused, color, size }) => (
-				<Ionicons
-					name={getIconName(route.name, focused)}
-					size={size}
-					color={color}
-				/>
+				<Ionicons name={getIconName(route.name, focused)} size={size} color={color} />
 			),
 			tabBarActiveTintColor: 'tomato',
 			tabBarInactiveTintColor: 'gray',
 		})}>
-		<Tab.Screen name='Home' component={LevelMap} />
+		<Tab.Screen name='Home' component={LevelMapScreen} />
 		<Tab.Screen name='Stats' component={StatsScreen} />
 		<Tab.Screen name='Account' component={AccountScreen} />
 	</Tab.Navigator>
