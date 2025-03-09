@@ -1,9 +1,11 @@
 import { useRef, useState } from 'react'
 import {
 	Button,
+	Pressable,
 	StyleSheet,
 	Text,
 	TextInput,
+	TouchableOpacity,
 	View,
 } from 'react-native'
 import CheckButton from './CheckButton'
@@ -41,23 +43,24 @@ const TextInputTask = ({
 
 	return (
 		<View style={styles.root}>
-			<View style={styles.content}>
-				<View style={styles.textContainer}>
-					<Text style={styles.text}>{partialAnswer[0]}</Text>
-					<View style={styles.inputContainer}>
-						<TextInput
-							style={styles.input}
-							maxLength={40}
-							onChangeText={setInputText}
-							value={inputText}
-							autoCapitalize='none'
-							autoComplete='off'
-						/>
-						<View style={styles.underline} />
-					</View>
-					<Text style={styles.text}>{partialAnswer[1]}</Text>
-				</View>
-			</View>
+			<Pressable style={styles.content} onPress={handleTextPress}>
+				<Text style={styles.text}>
+					<Text>{partialAnswer[0]} </Text>
+					<Text style={[styles.text, styles.inputText]}>
+						{inputText}
+					</Text>
+					<Text> {partialAnswer[1]}</Text>
+				</Text>
+				<TextInput
+					ref={inputRef}
+					style={styles.hiddenInput}
+					value={inputText}
+					onChangeText={setInputText}
+					autoCapitalize='none'
+					autoComplete='off'
+					maxLength={40}
+				/>
+			</Pressable>
 			<CheckButton onPress={handleSubmit} />
 		</View>
 	)
@@ -68,37 +71,31 @@ const styles = StyleSheet.create({
 	},
 	content: {
 		flex: 1,
+		height: '100%',
+		position: 'relative',
+		gap: 5,
 		backgroundColor: '#3331',
 		borderColor: '#3333',
 		borderWidth: 1.5,
 		padding: 10,
 		borderRadius: 8,
 	},
-	textContainer: {
-		flexDirection: 'row',
-		flexWrap: 'wrap',
-		alignItems: 'center',
-		gap: 8,
-	},
 	text: {
 		fontSize: 20,
-		lineHeight: 20,
+		lineHeight: 24,
 	},
-	inputContainer: {
-		position: 'relative',
-		minWidth: 50, // Минимальная ширина поля ввода
+	inputText: {
+		borderBottomWidth: 2,
+		borderColor: '#3333',
+		paddingHorizontal: 4,
+		minWidth: 50,
 	},
-	input: {
-		fontSize: 20,
-		paddingHorizontal: 4, // Убираем внутренние отступы
-	},
-	underline: {
+	hiddenInput: {
 		position: 'absolute',
-		left: 0,
-		right: 0,
-		bottom: 0,
-		height: 2,
-		backgroundColor: '#3333',
+		flex: 1,
+		width: 0,
+		height: 0,
+		opacity: 0,
 	},
 })
 
