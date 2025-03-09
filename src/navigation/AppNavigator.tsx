@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack'
 
 import MainTabs from './MainTabs'
-import { LevelPlayScreen, LevelStatsScreen, TheoryScreen } from '../../features'
+import { LevelPlayScreen, LevelStatsScreen, TheoryScreen } from '../features'
 
 const Stack = createStackNavigator()
 

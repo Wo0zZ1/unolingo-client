@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Ionicons } from '@expo/vector-icons'
 
 import { StyleSheet, Text, View } from 'react-native'
-import { LevelMapScreen } from '../../features'
+import { LevelMapScreen } from '../features'
 
 const Tab = createBottomTabNavigator()
 

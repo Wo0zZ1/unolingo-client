@@ -1,17 +1,15 @@
 import { useEffect } from 'react'
 import { ScrollView, StyleSheet, Text } from 'react-native'
-import { RouteProp } from '@react-navigation/native'
+import { RouteProp, useRoute } from '@react-navigation/native'
+
+import type { RootStackParamList } from '../../navigation/types'
 
 import { useTheoryStore } from '../../store/useTheoryStore'
-import { RootStackParamList } from '../../app/navigation/types'
 import { Header } from '../../widgets/ui'
 import LoadingScreen from '../LoadingScreen'
 
-interface ITheoryScreenProps {
-	route: RouteProp<RootStackParamList, 'Theory'>
-}
-
-const TheoryScreen = ({ route }: ITheoryScreenProps) => {
+const TheoryScreen = () => {
+	const route = useRoute<RouteProp<RootStackParamList, 'Theory'>>()
 	const { theoryId } = route.params
 
 	const { theory, fetching, fetchTheory } = useTheoryStore()

@@ -1,31 +1,21 @@
 import React, { useCallback, useState } from 'react'
 import { View, Text, StyleSheet, Animated } from 'react-native'
-import {
-	useFocusEffect,
-	useNavigation,
-} from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 
-import { RootStackParamList } from '../../app/navigation/types'
-import { useLevelStatsStore } from '../../app/store/useLevelStatsStore'
-import { useTasksStore } from '../../app/store/useTasksStore'
-import { useUserStore } from '../../app/store/useUserStore'
+import { RootStackParamList } from '../../navigation/types'
+import { useLevelStatsStore } from '../../store/useLevelStatsStore'
+import { useTasksStore } from '../../store/useTasksStore'
+import { useUserStore } from '../../store/useUserStore'
 import ContinueButton from './ui/ContinueButton'
 
 const LevelStatsScreen = () => {
-	const navigation =
-		useNavigation<StackNavigationProp<RootStackParamList>>()
+	const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
 
-	const { errors, startTime, endTime, resetStats } =
-		useLevelStatsStore()
+	const { errors, startTime, endTime, resetStats } = useLevelStatsStore()
 
-	const {
-		experience,
-		experienceToNextLevel,
-		experienceTotal,
-		level,
-		addExperience,
-	} = useUserStore()
+	const { experience, experienceToNextLevel, experienceTotal, level, addExperience } =
+		useUserStore()
 
 	const [progress] = useState(new Animated.Value(experience))
 
@@ -37,9 +27,7 @@ const LevelStatsScreen = () => {
 	// TODO Откорректировать формулу
 	// Формула начисления опыта
 	const awardedExperience = Math.round(
-		((100 - errorPercentage) / 100) *
-			Math.max(0, 1 - timeSpent / 60 / 3) *
-			100,
+		((100 - errorPercentage) / 100) * Math.max(0, 1 - timeSpent / 60 / 3) * 100,
 	)
 
 	const [oldData, setOldData] = useState<{
@@ -57,10 +45,7 @@ const LevelStatsScreen = () => {
 			})
 
 			Animated.timing(progress, {
-				toValue: Math.min(
-					experience + awardedExperience,
-					experience + experienceToNextLevel,
-				),
+				toValue: Math.min(experience + awardedExperience, experience + experienceToNextLevel),
 				duration: 1000,
 				useNativeDriver: false,
 			}).start()
@@ -82,18 +67,12 @@ const LevelStatsScreen = () => {
 				<Text style={styles.statText}>
 					Ошибки: {errors} ({errorPercentage.toFixed(0)}%)
 				</Text>
-				<Text style={styles.statText}>
-					Время: {timeSpent.toFixed(0)} сек
-				</Text>
-				<Text style={styles.statText}>
-					заработанный опыт: {awardedExperience} XP
-				</Text>
+				<Text style={styles.statText}>Время: {timeSpent.toFixed(0)} сек</Text>
+				<Text style={styles.statText}>заработанный опыт: {awardedExperience} XP</Text>
 			</View>
 
 			<View style={styles.progressContainer}>
-				<Text style={styles.statText}>
-					Опыта до следующего уровня
-				</Text>
+				<Text style={styles.statText}>Опыта до следующего уровня</Text>
 				<View style={styles.progressBarBackground}>
 					<Animated.View
 						style={[
@@ -102,8 +81,7 @@ const LevelStatsScreen = () => {
 								width: progress.interpolate({
 									inputRange: [
 										0,
-										(oldData?.experience || 0) +
-											(oldData?.experienceToNextLevel || 0),
+										(oldData?.experience || 0) + (oldData?.experienceToNextLevel || 0),
 									],
 									outputRange: ['0%', '100%'],
 								}),

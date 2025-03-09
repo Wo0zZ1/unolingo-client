@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { RouteProp, useNavigation } from '@react-navigation/native'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
+import type { RootStackParamList } from '../../navigation/types'
 
 import TaskQuestion from './ui/TaskQuestion'
 import WordPicker from './ui/WordPicker'
@@ -14,14 +15,10 @@ import LoadingScreen from '../LoadingScreen'
 
 import { Header } from '../../widgets/ui'
 import { ProgressBar } from '../../shared/ui'
-import { RootStackParamList } from '../../app/navigation/types'
 
-interface ILevelPlayScreenProps {
-	route: RouteProp<RootStackParamList, 'LevelPlay'>
-}
-
-const LevelPlayScreen = ({ route }: ILevelPlayScreenProps) => {
-	const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
+const LevelPlayScreen = () => {
+	const route = useRoute<RouteProp<RootStackParamList, 'LevelPlay'>>()
+	const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'LevelPlay'>>()
 
 	const { levelId } = route.params
 

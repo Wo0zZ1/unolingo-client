@@ -1,6 +1,6 @@
 import { StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native'
 
-import { RootStackParamList } from '../../../app/navigation/types'
+import { RootStackParamList } from '../../../navigation/types'
 import { memo } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'

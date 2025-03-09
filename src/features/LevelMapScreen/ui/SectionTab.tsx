@@ -6,7 +6,7 @@ import type { ILevel } from '../model/levels'
 
 import PressableButton from '../../../shared/ui/PressableButton'
 import vibrate from '../../../utils/vibrate'
-import { RootStackParamList } from '../../../app/navigation/types'
+import { RootStackParamList } from '../../../navigation/types'
 
 export interface ISectionTabProps {
 	currentSection: ILevel['section']
