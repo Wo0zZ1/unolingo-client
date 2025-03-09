@@ -7,7 +7,7 @@ import {
 
 import { LevelPlayScreen } from '../../features'
 import MainTabs from './MainTabs'
-import LevelStatsScreen from '../../features/LevelPlay/ui/LevelStatsScreen'
+import LevelStatsScreen from '../../features/LevelStatsScreen'
 
 const Stack = createStackNavigator()
 

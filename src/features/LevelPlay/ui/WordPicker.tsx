@@ -1,16 +1,8 @@
-import * as Haptics from 'expo-haptics'
-
 import { useState } from 'react'
-import {
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
-} from 'react-native'
-import Animated, {
-	useSharedValue,
-	withSpring,
-} from 'react-native-reanimated'
+import { StyleSheet, View } from 'react-native'
+
+import CheckButton from './CheckButton'
+import DraggableWord from './DraggableWord'
 
 interface IWordPickerProps {
 	options: string[]
@@ -24,78 +16,70 @@ const WordPicker = ({
 	onComplete,
 }: IWordPickerProps) => {
 	const [selectedWords, setSelectedWords] = useState<string[]>([])
-	const scale = useSharedValue(1)
+	const [availableWords, setAvailableWords] =
+		useState<string[]>(options)
 
-	const handleWordPress = (word: string) => {
-		const newSelectedWords = [...selectedWords, word]
-		setSelectedWords(newSelectedWords)
+	const handleWordRemove = (word: string) => {
+		setSelectedWords(prev => prev.filter(w => w !== word))
+		setAvailableWords(prev => [...prev, word])
+	}
 
-		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+	const handleWordAdd = (word: string) => {
+		setSelectedWords(prev => [...prev, word])
+		setAvailableWords(prev => prev.filter(w => w !== word))
+	}
 
-		scale.value = withSpring(
-			0.9,
-			{ damping: 2, stiffness: 100 },
-			() => {
-				scale.value = withSpring(1)
-			},
-		)
-
-		if (newSelectedWords.join(' ') === correctAnswer) {
-			onComplete(true)
-		}
+	const handleSubmit = () => {
+		// TODO Выполнить преобразование строки (trim, replace...)
+		onComplete(selectedWords.join(' ') === correctAnswer)
 	}
 
 	return (
 		<View style={styles.root}>
-			<View style={styles.wordsContainer}>
-				{options.map(word => (
-					<Animated.View
-						key={word}
-						style={{ transform: [{ scale }] }}>
-						<TouchableOpacity
-							style={styles.wordButton}
-							onPress={() => handleWordPress(word)}>
-							<Text style={styles.wordText}>{word}</Text>
-						</TouchableOpacity>
-					</Animated.View>
-				))}
+			{/* Область для выбранных слов */}
+			<View style={styles.wordsBlock}>
+				<View style={styles.wordsContainer}>
+					{selectedWords.map((word, index) => (
+						<DraggableWord
+							key={word}
+							word={word}
+							onSelect={handleWordRemove}
+						/>
+					))}
+				</View>
 			</View>
-			<View style={styles.selectedWordsContainer}>
-				<Text style={styles.selectedWordsText}>
-					{selectedWords.join(' ')}
-				</Text>
+
+			{/* Область для доступных слов */}
+			<View style={styles.wordsBlock}>
+				<View style={styles.wordsContainer}>
+					{availableWords.map((word, index) => (
+						<DraggableWord
+							key={word}
+							word={word}
+							onSelect={handleWordAdd}
+						/>
+					))}
+				</View>
 			</View>
+
+			{/* Кнопка проверки ответа */}
+			<CheckButton onPress={handleSubmit} />
 		</View>
 	)
 }
 
 const styles = StyleSheet.create({
 	root: {
-		alignItems: 'center',
+		flex: 1,
+		justifyContent: 'space-between',
+	},
+	wordsBlock: {
+		height: '35%',
 	},
 	wordsContainer: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		justifyContent: 'center',
-	},
-	wordButton: {
-		backgroundColor: '#e0e0e0',
-		padding: 10,
-		borderRadius: 8,
-		margin: 5,
-	},
-	wordText: {
-		fontSize: 16,
-	},
-	selectedWordsContainer: {
-		marginTop: 20,
-		padding: 10,
-		backgroundColor: '#f0f0f0',
-		borderRadius: 8,
-	},
-	selectedWordsText: {
-		fontSize: 18,
-		fontWeight: 'bold',
+		gap: 5,
 	},
 })
 

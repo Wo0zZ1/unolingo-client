@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { AppNavigator } from './src/app/navigation/AppNavigator'
 import { useUserStore } from './src/app/store/useUserStore'
-import { Text, View } from 'react-native'
+import { SafeAreaView, Text, View } from 'react-native'
 
 export default function App() {
 	const { fetchUserData, fetching } = useUserStore()
@@ -24,5 +24,9 @@ export default function App() {
 			</View>
 		)
 	}
-	return <AppNavigator />
+	return (
+		<SafeAreaView style={{ flex: 1 }}>
+			<AppNavigator />
+		</SafeAreaView>
+	)
 }

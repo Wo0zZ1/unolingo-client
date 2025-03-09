@@ -12,32 +12,34 @@ import {
 export interface IPressableButtonProps {
 	onPressIn?: () => void
 	onPressOut?: () => void
-	onPress: () => void
+	onPress?: () => void
 	children: ReactNode
 	bgFront: ColorValue
 	bgBack: ColorValue
 	borderRadius?: number | string
 	yOffset?: number
 	disabled?: boolean
+	longPress?: boolean
 	style?: StyleProp<ViewStyle>
 }
 
 const PressableButton = ({
 	onPressIn = () => {},
 	onPressOut = () => {},
-	onPress,
+	onPress = () => {},
 	children,
 	bgFront,
 	bgBack,
 	borderRadius = 8,
 	yOffset = 4,
 	disabled = false,
+	longPress = false,
 	style,
 }: IPressableButtonProps) => {
 	const translateY = useRef(new Animated.Value(-yOffset)).current
 
 	const handlePressIn = () => {
-		if (disabled) return
+		if (disabled || longPress) return
 
 		onPressIn()
 		Animated.timing(translateY, {
@@ -48,7 +50,29 @@ const PressableButton = ({
 	}
 
 	const handlePressOut = () => {
-		if (disabled) return
+		if (disabled || longPress) return
+
+		onPressOut()
+		Animated.timing(translateY, {
+			toValue: -yOffset,
+			duration: 30,
+			useNativeDriver: true,
+		}).start()
+	}
+
+	const handleTouchStart = () => {
+		if (disabled || !longPress) return
+
+		onPressOut()
+		Animated.timing(translateY, {
+			toValue: 0,
+			duration: 50,
+			useNativeDriver: true,
+		}).start()
+	}
+
+	const handleTouchEnd = () => {
+		if (disabled || !longPress) return
 
 		onPressOut()
 		Animated.timing(translateY, {
@@ -66,7 +90,9 @@ const PressableButton = ({
 	return (
 		<Pressable
 			onPressIn={handlePressIn}
+			onTouchStart={handleTouchStart}
 			onPressOut={handlePressOut}
+			onTouchEnd={handleTouchEnd}
 			onPress={handlePress}
 			style={styles.root}>
 			<View

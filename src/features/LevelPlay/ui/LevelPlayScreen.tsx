@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { RouteProp, useNavigation } from '@react-navigation/native'
 
-import TaskBubble from './TaskBubble'
+import TaskQuestion from './TaskQuestion'
 import WordPicker from './WordPicker'
 import TextInputTask from './TextInputTask'
 
@@ -16,7 +16,7 @@ import { RootStackParamList } from '../../../app/navigation/types'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { useLevelStatsStore } from '../../../app/store/useLevelStatsStore'
 import { useTasksStore } from '../../../app/store/useTasksStore'
-import QuitButton from './quitButton'
+import QuitButton from './QuitButton'
 import ProgressBar from './ProgressBar'
 
 interface ILevelPlayScreenProps {
@@ -58,46 +58,91 @@ const LevelPlayScreen = ({ route }: ILevelPlayScreenProps) => {
 	if (fetching)
 		return (
 			<View style={styles.container}>
-				<QuitButton />
-
+				<View style={styles.header}>
+					{/* Кнопка выхода */}
+					<QuitButton style={styles.close} />
+				</View>
 				<Text style={{ fontSize: 30 }}>Идет поиск заданий...</Text>
 			</View>
 		)
 
 	return (
 		<View style={styles.container}>
-			<QuitButton />
+			<View style={styles.header}>
+				{/* Кнопка выхода */}
+				<QuitButton style={styles.close} />
 
-			<ProgressBar
-				currentTaskIndex={currentTaskIndex}
-				tasksLength={tasks.length}
+				{/* Шкала прогресса */}
+				<ProgressBar
+					style={styles.bar}
+					lastProgress={(currentTaskIndex - 1) / tasks.length}
+					progress={currentTaskIndex / tasks.length}
+					// width={450}
+				/>
+			</View>
+
+			{/* Содержимое вопроса */}
+			<TaskQuestion
+				type={currentTask.type}
+				question={currentTask.question}
 			/>
 
-			<TaskBubble question={currentTask.question} />
-
-			{/* Поле для ввода и кнопка "Проверить" */}
-			{currentTask.type === 'wordPicker' ? (
-				<WordPicker
-					options={currentTask.options!}
-					correctAnswer={currentTask.correctAnswer}
-					onComplete={handleTaskComplete}
-				/>
-			) : (
-				<TextInputTask
-					correctAnswer={currentTask.correctAnswer}
-					onComplete={handleTaskComplete}
-				/>
-			)}
+			<View style={styles.content}>
+				{/* Поле для ввода и кнопка "Проверить" */}
+				{currentTask.type === 'wordPicker' ? (
+					<WordPicker
+						options={currentTask.options}
+						correctAnswer={currentTask.correctAnswer}
+						onComplete={handleTaskComplete}
+					/>
+				) : (
+					<TextInputTask
+						partialAnswer={currentTask.partialAnswer}
+						correctAnswer={currentTask.correctAnswer}
+						onComplete={handleTaskComplete}
+					/>
+				)}
+			</View>
 		</View>
 	)
 }
 
 const styles = StyleSheet.create({
 	container: {
+		position: 'relative',
 		flex: 1,
-		padding: 20,
+		paddingHorizontal: 20,
+		paddingVertical: 60,
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	header: {
+		zIndex: 10,
+		position: 'absolute',
+		top: 20,
+		left: 20,
+		right: 20,
+		height: 40,
+		paddingHorizontal: 30,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+		gap: 16,
+	},
+	close: {
+		position: 'absolute',
+		top: 0,
+		bottom: 0,
+		left: 0,
+	},
+	bar: {
+		marginLeft: 20,
+		maxWidth: 450,
+	},
+	content: {
+		flex: 1,
+		width: '100%',
+		marginTop: 24,
 	},
 })
 

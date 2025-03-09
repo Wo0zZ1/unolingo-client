@@ -1,21 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import {
-	View,
-	Text,
-	StyleSheet,
-	TouchableOpacity,
-	Animated,
-} from 'react-native'
+import React, { useCallback, useState } from 'react'
+import { View, Text, StyleSheet, Animated } from 'react-native'
 import {
 	useFocusEffect,
 	useNavigation,
 } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 
-import { RootStackParamList } from '../../../app/navigation/types'
-import { useLevelStatsStore } from '../../../app/store/useLevelStatsStore'
-import { useTasksStore } from '../../../app/store/useTasksStore'
-import { useUserStore } from '../../../app/store/useUserStore'
+import { RootStackParamList } from '../../app/navigation/types'
+import { useLevelStatsStore } from '../../app/store/useLevelStatsStore'
+import { useTasksStore } from '../../app/store/useTasksStore'
+import { useUserStore } from '../../app/store/useUserStore'
+import ContinueButton from './ui/ContinueButton'
 
 const LevelStatsScreen = () => {
 	const navigation =
@@ -125,11 +120,7 @@ const LevelStatsScreen = () => {
 				<Text style={styles.statText}>NEW {level} LEVEL!</Text>
 			</View>
 
-			<TouchableOpacity
-				style={styles.continueButton}
-				onPress={handleDone}>
-				<Text style={styles.continueButtonText}>Продолжить</Text>
-			</TouchableOpacity>
+			<ContinueButton onPress={handleDone} />
 		</View>
 	)
 }
@@ -170,19 +161,6 @@ const styles = StyleSheet.create({
 		height: '100%',
 		backgroundColor: 'tomato',
 		borderRadius: 5,
-	},
-	continueButton: {
-		marginTop: 20,
-		backgroundColor: 'tomato',
-		padding: 15,
-		borderRadius: 8,
-		width: '80%',
-		alignItems: 'center',
-	},
-	continueButtonText: {
-		color: 'white',
-		fontSize: 18,
-		fontWeight: 'bold',
 	},
 })
 

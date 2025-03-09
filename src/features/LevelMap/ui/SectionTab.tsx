@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import type { ILevel } from '../model/levels'
 
 import PressableButton from '../../../shared/ui/buttons/PressableButton'
+import vibrate from '../../../utils/vibrate'
 
 export interface ISectionTabProps {
 	currentSection: ILevel['section']
@@ -10,7 +11,7 @@ export interface ISectionTabProps {
 
 const SectionTab = ({ currentSection }: ISectionTabProps) => {
 	const theoryPressIn = () => {
-		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+		vibrate('light')
 	}
 
 	const theoryPress = (section: number) => {

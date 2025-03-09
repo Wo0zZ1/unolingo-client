@@ -4,7 +4,7 @@ import { ILevel } from '../model/levels'
 
 import LevelCircle from './LevelCircle'
 import { SectionDivider } from './SectionDivider'
-import useWindow from '../../../hoocs/useWidth'
+import { useDimensions } from '../../../hoocs'
 
 export interface ILevelsSectionsProps {
 	levels: ILevel[]
@@ -12,7 +12,7 @@ export interface ILevelsSectionsProps {
 }
 
 const LevelsSection = ({ levels, height }: ILevelsSectionsProps) => {
-	const { width } = useWindow()
+	const { width } = useDimensions()
 
 	const calcLeft = (index: number) => {
 		if (index % 2 == 0) return 'mid'

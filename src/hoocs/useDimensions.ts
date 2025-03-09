@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Dimensions } from 'react-native'
 
-const useWindow = () => {
+const useDimensions = () => {
 	const [width, setWidth] = useState<number>(
 		Dimensions.get('window').width,
 	)
@@ -23,4 +23,4 @@ const useWindow = () => {
 
 	return { width, height }
 }
-export default useWindow
+export { useDimensions }

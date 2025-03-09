@@ -14,12 +14,12 @@ import { groupLevels } from '../lib/groupLevels'
 import SectionTab from './SectionTab'
 import LevelsSection from './LevelsSection'
 import PathLine from './PathLine'
-import useWindow from '../../../hoocs/useWidth'
+import { useDimensions } from '../../../hoocs'
 
 const SECTION_HEIGHT = 700
 
 const LevelMap = () => {
-	const { height } = useWindow()
+	const { height } = useDimensions()
 
 	const [currentSection, setCurrentSection] = useState<number>(1)
 	const scrollViewRef = useRef<ScrollView>(null)

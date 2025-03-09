@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native'
 import Svg, { Path } from 'react-native-svg'
 import { generatePath } from '../lib/generatePath'
 import { memo } from 'react'
-import useWindow from '../../../hoocs/useWidth'
+import { useDimensions } from '../../../hoocs'
 
 interface IPathLineProps {
 	sectionsCount: number
@@ -11,7 +11,7 @@ interface IPathLineProps {
 
 const PathLine = memo(
 	({ sectionHeight, sectionsCount }: IPathLineProps) => {
-		const { width } = useWindow()
+		const { width } = useDimensions()
 
 		return (
 			<Svg height='100%' width='100%' style={styles.path}>

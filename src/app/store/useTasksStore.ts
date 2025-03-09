@@ -1,13 +1,19 @@
 import { create } from 'zustand'
 import sleep from '../../utils/sleep'
 
-export type TaskType = 'wordPicker' | 'textInput'
+export interface ITaskWordPicker {
+	type: 'wordPicker'
+	options: string[]
+}
 
-export interface ITask {
+export interface ITaskTextInput {
+	type: 'textInput'
+	partialAnswer: [string, string]
+}
+
+export type ITask = (ITaskWordPicker | ITaskTextInput) & {
 	id: number
-	type: TaskType
 	question: string
-	options?: string[]
 	correctAnswer: string
 }
 
@@ -40,16 +46,28 @@ export const useTasksStore = create<TasksStore>(set => ({
 			{
 				id: 1,
 				type: 'wordPicker',
-				question: 'Переведите предложение: "Я люблю программировать"',
-				options: ['Я', 'люблю', 'программировать'],
-				correctAnswer: 'Я люблю программировать',
+				question:
+					"Hello! My name is Max. Now, I'm programming this application!",
+				options: [
+					'Привет!',
+					'Меня',
+					'зовут',
+					'Максим.',
+					'Сейчас',
+					'я',
+					'программирую',
+					'это',
+					'приложение!',
+				],
+				correctAnswer:
+					'Привет! Меня зовут Максим. Сейчас я программирую это приложение!',
 			},
 			{
 				id: 2,
 				type: 'textInput',
-				question:
-					'Введите пропущенное слово: "Я ___ программировать."',
-				correctAnswer: 'люблю',
+				question: 'Я люблю программировать.',
+				partialAnswer: ['I', 'programming.'],
+				correctAnswer: 'like',
 			},
 		]
 
