@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, Animated } from 'react-native'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 
+import ContinueButton from './ui/ContinueButton'
+
 import { RootStackParamList } from '../../navigation/types'
+
 import { useLevelStatsStore } from '../../store/useLevelStatsStore'
 import { useTasksStore } from '../../store/useTasksStore'
 import { useUserStore } from '../../store/useUserStore'
-import ContinueButton from './ui/ContinueButton'
 
 const LevelStatsScreen = () => {
 	const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
@@ -142,4 +144,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default LevelStatsScreen
+export { LevelStatsScreen }

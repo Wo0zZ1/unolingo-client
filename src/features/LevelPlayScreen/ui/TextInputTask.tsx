@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react'
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 
+import { ITask, ITaskTextInput } from '../../../store/useTasksStore'
+
 import CheckButton from './CheckButton'
-import { ITask, ITaskTextInput } from '../../../app/store/useTasksStore'
 
 interface ITextInputTaskProps {
 	partialAnswer: ITaskTextInput['partialAnswer']

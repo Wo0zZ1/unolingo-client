@@ -1,1 +1,3 @@
-export const COLORS = {} as const
+export const COLORS = {
+	white: '#FFFFFF',
+} as const

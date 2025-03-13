@@ -1,10 +1,12 @@
 import * as Haptics from 'expo-haptics'
 import { StyleSheet, View } from 'react-native'
-
-import PressableButton from '../../../shared/ui/PressableButton'
-import { ILevel } from '../model/levels'
 import { useNavigation } from '@react-navigation/native'
+
+import { ILevel } from '../model/levels'
+
 import { NavigationProp } from '../../../navigation/types'
+
+import { PressableButton } from '../../../shared/ui'
 
 type TPosition = 'left' | 'mid' | 'right'
 

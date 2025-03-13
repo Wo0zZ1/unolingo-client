@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 
-import { Header } from '../../widgets/ui'
+import { Header } from '../Header'
 
 interface ILoadingScreenProps {
 	title: string
@@ -10,8 +10,9 @@ interface ILoadingScreenProps {
 const LoadingScreen = ({ title, backBtn = true }: ILoadingScreenProps) => {
 	return (
 		<>
-			{backBtn && <Header />}
+			<Header backBtn={backBtn} underline={false} />
 			<View style={styles.container}>
+				{/* TODO Переписать на React Node */}
 				<Text style={{ fontSize: 30 }}>{title}</Text>
 			</View>
 		</>
@@ -23,7 +24,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
-		backgroundColor: '#fff',
 	},
 	header: {
 		zIndex: 10,
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default LoadingScreen
+export { LoadingScreen }

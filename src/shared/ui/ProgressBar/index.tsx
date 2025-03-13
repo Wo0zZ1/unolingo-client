@@ -1,11 +1,5 @@
 import { memo, useEffect } from 'react'
-import {
-	Animated,
-	StyleProp,
-	StyleSheet,
-	View,
-	ViewStyle,
-} from 'react-native'
+import { Animated, StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 
 interface IProgressBarProps {
 	style?: StyleProp<ViewStyle>
@@ -58,4 +52,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default ProgressBar
+export { ProgressBar }

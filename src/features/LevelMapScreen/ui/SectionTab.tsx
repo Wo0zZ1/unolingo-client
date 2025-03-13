@@ -4,9 +4,10 @@ import { StackNavigationProp } from '@react-navigation/stack'
 
 import type { ILevel } from '../model/levels'
 
-import PressableButton from '../../../shared/ui/PressableButton'
 import vibrate from '../../../utils/vibrate'
 import { RootStackParamList } from '../../../navigation/types'
+
+import { PressableButton } from '../../../shared/ui'
 
 export interface ISectionTabProps {
 	currentSection: ILevel['section']

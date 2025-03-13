@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
 
-import PressableButton from '../../../shared/ui/PressableButton'
+import { PressableButton } from '../../../shared/ui'
 
 interface IDraggableWordProps {
 	word: string

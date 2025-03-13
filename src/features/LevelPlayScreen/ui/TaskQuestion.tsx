@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 
-import { ITask } from '../../../app/store/useTasksStore'
+import { ITask } from '../../../store/useTasksStore'
+
 
 interface ITaskQuestionProps {
 	type: ITask['type']

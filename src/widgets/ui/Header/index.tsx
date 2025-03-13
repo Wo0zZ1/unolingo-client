@@ -1,19 +1,40 @@
 import { memo, ReactNode } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 
 import { QuitButton } from '../../../shared/ui'
 
-interface IHeaderProps {
-	children?: ReactNode
+type IContent =
+	| {
+			title: string
+			children?: undefined
+	  }
+	| {
+			title?: undefined
+			children: ReactNode
+	  }
+	| {
+			title?: undefined
+			children?: undefined
+	  }
+
+type IHeaderProps = IContent & {
+	backBtn?: boolean
+	underline?: boolean
 }
 
-const Header = memo(({ children }: IHeaderProps) => {
+const Header = memo(({ backBtn = true, underline = false, children, title }: IHeaderProps) => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.header}>
-				<QuitButton style={styles.close} />
+				{/* Кнопка назад */}
+				{backBtn && <QuitButton style={styles.close} />}
+				{/* Заголовок */}
+				<Text style={styles.title}>{title}</Text>
+				{/* Кастомный элемент */}
 				{children}
 			</View>
+			{/* Подводка */}
+			{underline && <View style={styles.underline} />}
 		</View>
 	)
 })
@@ -24,7 +45,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		height: 50,
-		backgroundColor: '#fff',
 	},
 	header: {
 		zIndex: 10,
@@ -45,6 +65,15 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		left: 0,
 	},
+	title: { fontSize: 24, fontWeight: 600, textTransform: 'uppercase' },
+	underline: {
+		position: 'absolute',
+		height: 1,
+		bottom: 0,
+		left: 0,
+		right: 0,
+		backgroundColor: '#f2f2f2',
+	},
 })
 
-export default Header
+export { Header }

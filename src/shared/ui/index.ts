@@ -1,5 +1,3 @@
-import QuitButton from './QuitButton'
-import ProgressBar from './ProgressBar'
-import PressableButton from './PressableButton'
-
-export { QuitButton, ProgressBar, PressableButton }
+export * from './PressableButton'
+export * from './ProgressBar'
+export * from './QuitButton'

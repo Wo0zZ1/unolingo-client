@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native'
 
 import { AppNavigator } from './src/navigation/AppNavigator'
 import { useUserStore } from './src/store/useUserStore'
-import LoadingScreen from './src/features/LoadingScreen'
+import { LoadingScreen } from './src/widgets/ui'
 
 export default function App() {
 	const { fetchUserData, fetching } = useUserStore()

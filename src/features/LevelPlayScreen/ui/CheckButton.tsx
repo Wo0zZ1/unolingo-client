@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
-import PressableButton from '../../../shared/ui/PressableButton'
+import {PressableButton} from '../../../shared/ui'
 import vibrate from '../../../utils/vibrate'
 
 interface ICheckButtonProps {

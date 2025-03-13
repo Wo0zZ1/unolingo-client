@@ -1,7 +1,8 @@
+import { memo } from 'react'
 import { StyleSheet } from 'react-native'
 import Svg, { Path } from 'react-native-svg'
 import { generatePath } from '../lib/generatePath'
-import { memo } from 'react'
+
 import { useDimensions } from '../../../hoocs'
 
 interface IPathLineProps {

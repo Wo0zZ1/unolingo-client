@@ -1,8 +1,13 @@
+import { ReactNode } from 'react'
+import { View } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack'
 
-import MainTabs from './MainTabs'
+import { COLORS } from '../constants/theme'
+
 import { LevelPlayScreen, LevelStatsScreen, TheoryScreen } from '../features'
+
+import MainTabs from './MainTabs'
 
 const Stack = createStackNavigator()
 
@@ -13,13 +18,41 @@ const defaultOptions: StackNavigationOptions = {
 	freezeOnBlur: true,
 }
 
+interface IRootLayoutProps {
+	children: ReactNode
+}
+
+const RootLayout = ({ children }: IRootLayoutProps) => {
+	return <View style={{ flex: 1, backgroundColor: COLORS.white }}>{children}</View>
+}
+
 export const AppNavigator = () => (
 	<NavigationContainer>
 		<Stack.Navigator>
-			<Stack.Screen name='MainTabs' component={MainTabs} options={defaultOptions} />
-			<Stack.Screen name='LevelPlay' component={LevelPlayScreen} options={defaultOptions} />
-			<Stack.Screen name='LevelStats' component={LevelStatsScreen} options={defaultOptions} />
-			<Stack.Screen name='Theory' component={TheoryScreen} options={defaultOptions} />
+			<Stack.Screen
+				layout={RootLayout}
+				name='MainTabs'
+				component={MainTabs}
+				options={defaultOptions}
+			/>
+			<Stack.Screen
+				layout={RootLayout}
+				name='LevelPlay'
+				component={LevelPlayScreen}
+				options={defaultOptions}
+			/>
+			<Stack.Screen
+				layout={RootLayout}
+				name='LevelStats'
+				component={LevelStatsScreen}
+				options={defaultOptions}
+			/>
+			<Stack.Screen
+				layout={RootLayout}
+				name='Theory'
+				component={TheoryScreen}
+				options={defaultOptions}
+			/>
 		</Stack.Navigator>
 	</NavigationContainer>
 )

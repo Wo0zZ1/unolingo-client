@@ -1,10 +1,5 @@
 import * as Haptics from 'expo-haptics'
-import {
-	NativeScrollEvent,
-	ScrollView,
-	StyleSheet,
-	View,
-} from 'react-native'
+import { NativeScrollEvent, ScrollView, StyleSheet, View } from 'react-native'
 import { useEffect, useRef, useState } from 'react'
 
 import { ILevel, mockLevels } from './model/levels'
@@ -18,29 +13,21 @@ import { useDimensions } from '../../hoocs'
 
 const SECTION_HEIGHT = 700
 
-const LevelMap = () => {
+const LevelMapScreen = () => {
 	const { height } = useDimensions()
 
 	const [currentSection, setCurrentSection] = useState<number>(1)
 	const scrollViewRef = useRef<ScrollView>(null)
 	// TODO Сделать прокрут страницы к последнему непройденному уровню
 
-	const handleScroll = (event: {
-		nativeEvent: NativeScrollEvent
-	}) => {
+	const handleScroll = (event: { nativeEvent: NativeScrollEvent }) => {
 		const scrollY = event.nativeEvent.contentOffset.y
 		const newSection = Math.min(
-			Math.max(
-				1,
-				Math.floor(
-					(scrollY + height / 6) / (SECTION_HEIGHT + 20) + 1,
-				),
-			),
+			Math.max(1, Math.floor((scrollY + height / 6) / (SECTION_HEIGHT + 20) + 1)),
 			sections.length,
 		)
 		setCurrentSection(prev => {
-			if (prev !== newSection)
-				Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+			if (prev !== newSection) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
 			return newSection
 		})
 	}
@@ -67,16 +54,9 @@ const LevelMap = () => {
 				contentContainerStyle={styles.scrollContainer}
 				onScroll={handleScroll}
 				scrollEventThrottle={16}>
-				<PathLine
-					sectionHeight={SECTION_HEIGHT}
-					sectionsCount={sections.length}
-				/>
+				<PathLine sectionHeight={SECTION_HEIGHT} sectionsCount={sections.length} />
 				{sections.map((levels, index) => (
-					<LevelsSection
-						key={index}
-						levels={levels}
-						height={SECTION_HEIGHT}
-					/>
+					<LevelsSection key={index} levels={levels} height={SECTION_HEIGHT} />
 				))}
 			</ScrollView>
 		</View>
@@ -94,4 +74,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default LevelMap
+export { LevelMapScreen }

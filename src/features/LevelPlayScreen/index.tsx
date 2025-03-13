@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import type { RootStackParamList } from '../../navigation/types'
@@ -11,9 +11,7 @@ import TextInputTask from './ui/TextInputTask'
 import { useTasksStore } from '../../store/useTasksStore'
 import { useLevelStatsStore } from '../../store/useLevelStatsStore'
 
-import LoadingScreen from '../LoadingScreen'
-
-import { Header } from '../../widgets/ui'
+import { Header, LoadingScreen } from '../../widgets/ui'
 import { ProgressBar } from '../../shared/ui'
 
 const LevelPlayScreen = () => {
@@ -62,8 +60,11 @@ const LevelPlayScreen = () => {
 				{/* Содержимое вопроса */}
 				<TaskQuestion type={currentTask.type} question={currentTask.question} />
 
-				<View style={styles.content}>
-					{/* Поле для ввода и кнопка "Проверить" */}
+				{/* Форма ответа */}
+				<KeyboardAvoidingView
+					style={styles.content}
+					behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+					keyboardVerticalOffset={120}>
 					{currentTask.type === 'wordPicker' ? (
 						<WordPicker
 							options={currentTask.options}
@@ -77,7 +78,7 @@ const LevelPlayScreen = () => {
 							onComplete={handleTaskComplete}
 						/>
 					)}
-				</View>
+				</KeyboardAvoidingView>
 			</View>
 		</>
 	)
@@ -89,7 +90,6 @@ const styles = StyleSheet.create({
 		position: 'relative',
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: '#fff',
 		paddingHorizontal: 20,
 	},
 	bar: {
@@ -103,4 +103,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default LevelPlayScreen
+export { LevelPlayScreen }

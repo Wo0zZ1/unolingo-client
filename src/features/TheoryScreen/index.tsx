@@ -1,58 +1,61 @@
-import { useEffect } from 'react'
-import { ScrollView, StyleSheet, Text } from 'react-native'
+import { useCallback, useEffect } from 'react'
 import { RouteProp, useRoute } from '@react-navigation/native'
+import { FlatList, ListRenderItemInfo, StyleSheet } from 'react-native'
+
+import { Empty, Separator, TheoryBlock } from './ui'
 
 import type { RootStackParamList } from '../../navigation/types'
 
-import { useTheoryStore } from '../../store/useTheoryStore'
-import { Header } from '../../widgets/ui'
-import LoadingScreen from '../LoadingScreen'
+import { ITheoryBlock, useTheoryStore } from '../../store/useTheoryStore'
+
+import { Header, LoadingScreen } from '../../widgets/ui'
 
 const TheoryScreen = () => {
 	const route = useRoute<RouteProp<RootStackParamList, 'Theory'>>()
 	const { theoryId } = route.params
 
-	const { theory, fetching, fetchTheory } = useTheoryStore()
+	const { theoryData, fetching, fetchTheory } = useTheoryStore()
+
+	const renderTheoryBlock = useCallback(
+		({ item }: ListRenderItemInfo<ITheoryBlock>) => <TheoryBlock {...item} />,
+		[],
+	)
 
 	useEffect(() => {
 		fetchTheory(theoryId)
-	}, [])
+	}, [theoryId])
 
 	if (fetching) return <LoadingScreen title={'Загрузка теории...'} />
 
 	return (
 		<>
-			<Header />
-			<ScrollView contentContainerStyle={styles.container}>
-				<Text style={styles.title}>{theory?.title}</Text>
-				{theory.paragraphs.map((paragraph, index) => (
-					<Text key={index} style={styles.paragraph}>
-						{paragraph}
-					</Text>
-				))}
-			</ScrollView>
+			<Header underline={true} title={theoryData.name} />
+			<FlatList
+				contentContainerStyle={styles.container}
+				keyExtractor={({ title }) => title}
+				data={theoryData.theoryBlocks}
+				ListEmptyComponent={Empty}
+				renderItem={renderTheoryBlock}
+				ItemSeparatorComponent={Separator}
+			/>
 		</>
 	)
 }
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		height: '100%',
 		padding: 20,
-		backgroundColor: '#fff',
 	},
 	title: {
-		fontSize: 24,
+		fontSize: 28,
 		fontWeight: 'bold',
 		marginBottom: 20,
 	},
 	text: {
-		fontSize: 16,
+		fontSize: 18,
 		lineHeight: 24,
-		marginBottom: 10,
+		marginBottom: 6,
 	},
-	paragraph: {},
 })
 
-export default TheoryScreen
+export { TheoryScreen }

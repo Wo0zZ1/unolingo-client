@@ -1,19 +1,25 @@
 import { create } from 'zustand'
+
 import sleep from '../utils/sleep'
 
-export type ITheory = {
-	id: number
+export type ITheoryBlock = {
 	title: string
 	paragraphs: string[]
 }
 
+export type ITheoryData = {
+	id: number
+	name: string
+	theoryBlocks: ITheoryBlock[]
+}
+
 type ITheoryStatePending = {
-	theory: null
+	theoryData: null
 	fetching: true
 }
 
 type ITheoryStateFullfield = {
-	theory: ITheory
+	theoryData: ITheoryData
 	fetching: false
 }
 
@@ -22,11 +28,11 @@ type TheoryStore = (ITheoryStatePending | ITheoryStateFullfield) & {
 }
 
 export const useTheoryStore = create<TheoryStore>(set => ({
-	theory: null,
+	theoryData: null,
 	fetching: true,
 
 	fetchTheory: async theoryId => {
-		set(prev => ({ ...prev, theory: null, fetching: true }))
+		set({ theoryData: null, fetching: true })
 
 		// TODO Подключить сервер
 		// const response = await fetch('https://api.example.com/theory/id')
@@ -37,20 +43,32 @@ export const useTheoryStore = create<TheoryStore>(set => ({
 
 		await sleep(1000)
 
-		const currentTheory: ITheory = {
+		const currentTheory: ITheoryData = {
 			id: 1,
-			title: 'Past Simple',
-			paragraphs: [
-				'Past Simple используется для описания завершенных действий...',
-				'Он часто фываы аыв аыва ыв...',
-				'Используйте Past Simple только в тех случаях, когда...',
+			name: 'Past Simple',
+			theoryBlocks: [
+				{
+					title: 'Когда используется:',
+					paragraphs: [
+						'Past Simple используется для описания завершенных действий...',
+						'Он часто фываы аыв аыва ыв...',
+						'Используйте Past Simple только в тех случаях, когда...',
+					],
+				},
+				{
+					title: 'Примеры:',
+					paragraphs: [
+						'Я пример 1...',
+						'А я пример два баляяяяяяяяяя аваыф я пример два баляяяяяяяяяя аваыфвааываыфвыавОн час я пример два баляяяяяяяяяя аваыфвааываыфвыавОн час я пример два баляяяяяяяяяя аваыфвааываыфвыавОн часвааываыфвыавОн часто фываы аыв аыва ыв...',
+						'Используйте выаываываыавх случааыфваях, когда...',
+					],
+				},
 			],
 		}
 
-		set(prev => ({
-			...prev,
+		set({
 			fetching: false,
-			theory: currentTheory,
-		}))
+			theoryData: currentTheory,
+		})
 	},
 }))
