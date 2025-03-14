@@ -18,11 +18,7 @@ const defaultOptions: StackNavigationOptions = {
 	freezeOnBlur: true,
 }
 
-interface IRootLayoutProps {
-	children: ReactNode
-}
-
-const RootLayout = ({ children }: IRootLayoutProps) => {
+const RootLayout = ({ children }: { children: ReactNode }) => {
 	return <View style={{ flex: 1, backgroundColor: COLORS.white }}>{children}</View>
 }
 
