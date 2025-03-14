@@ -1,14 +1,15 @@
 import { useCallback } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
-import {PressableButton} from '../../../shared/ui'
+import { PressableButton } from '../../../shared/ui'
 import vibrate from '../../../utils/vibrate'
 
 interface ICheckButtonProps {
+	disabled?: boolean
 	onPress: () => void
 }
 
-const CheckButton = ({ onPress }: ICheckButtonProps) => {
+const CheckButton = ({ disabled = false, onPress }: ICheckButtonProps) => {
 	const onPressIn = useCallback(() => {
 		vibrate('medium')
 	}, [])
@@ -20,7 +21,8 @@ const CheckButton = ({ onPress }: ICheckButtonProps) => {
 				onPress={onPress}
 				onPressIn={onPressIn}
 				bgFront={'tomato'}
-				bgBack={'#cc4f38'}>
+				bgBack={'#cc4f38'}
+				disabled={disabled}>
 				<Text style={styles.title}>Проверить</Text>
 			</PressableButton>
 		</View>

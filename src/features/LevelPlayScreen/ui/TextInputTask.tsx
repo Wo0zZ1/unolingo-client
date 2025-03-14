@@ -2,7 +2,6 @@ import { useRef, useState } from 'react'
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 
 import { ITask, ITaskTextInput } from '../../../store/useTasksStore'
-
 import CheckButton from './CheckButton'
 
 interface ITextInputTaskProps {
@@ -14,16 +13,18 @@ interface ITextInputTaskProps {
 const TextInputTask = ({ partialAnswer, correctAnswer, onComplete }: ITextInputTaskProps) => {
 	const [inputText, setInputText] = useState('')
 
-	//
 	const inputRef = useRef<TextInput>(null)
 
 	const handleTextPress = () => {
 		inputRef.current?.focus()
 	}
-	//
+
+	const parseInput = (str: string) => {
+		return str.trim().replaceAll(/ +/g, ' ').toLowerCase()
+	}
 
 	const handleSubmit = () => {
-		onComplete(inputText.trim().toLowerCase() === correctAnswer.toLowerCase())
+		onComplete(parseInput(inputText) === correctAnswer.toLowerCase())
 	}
 
 	return (
@@ -44,7 +45,7 @@ const TextInputTask = ({ partialAnswer, correctAnswer, onComplete }: ITextInputT
 					maxLength={40}
 				/>
 			</Pressable>
-			<CheckButton onPress={handleSubmit} />
+			<CheckButton disabled={parseInput(inputText).length === 0} onPress={handleSubmit} />
 		</View>
 	)
 }

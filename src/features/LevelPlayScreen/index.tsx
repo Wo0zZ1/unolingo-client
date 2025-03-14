@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
@@ -14,7 +14,7 @@ import { useLevelStatsStore } from '../../store/useLevelStatsStore'
 import { Header, LoadingScreen } from '../../widgets/ui'
 import { ProgressBar } from '../../shared/ui'
 
-const LevelPlayScreen = () => {
+const LevelPlayScreen = memo(() => {
 	const route = useRoute<RouteProp<RootStackParamList, 'LevelPlay'>>()
 	const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'LevelPlay'>>()
 
@@ -82,7 +82,7 @@ const LevelPlayScreen = () => {
 			</View>
 		</>
 	)
-}
+})
 
 const styles = StyleSheet.create({
 	container: {
