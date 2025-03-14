@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import sleep from '../utils/sleep' 
+import sleep from '../utils/sleep'
 
 export interface ITaskWordPicker {
 	type: 'wordPicker'
@@ -36,31 +36,34 @@ export const useTasksStore = create<TasksStore>(set => ({
 		// const data = await response.json()
 
 		// Mock data
-		console.log(
-			`Типа идет фетчинг заданий для уровня с id ${levelId}`,
-		)
+		console.log(`Типа идет фетчинг заданий для уровня с id ${levelId}`)
 
 		await sleep(1000)
 
 		const currentTasks: ITask[] = [
 			{
+				id: 0,
+				type: 'textInput',
+				question: 'Я хочу чашку кофе.',
+				partialAnswer: ['I would like a', '.'],
+				correctAnswer: 'cup of coffee',
+			},
+			{
 				id: 1,
 				type: 'wordPicker',
-				question:
-					"Hello! My name is Max. Now, I'm programming this application!",
+				question: "Hello! My name is Max. Now, I'm programming this application!",
 				options: [
-					'Привет!',
-					'Меня',
-					'зовут',
 					'Максим.',
+					'Привет!',
+					'приложение!',
+					'программирую',
 					'Сейчас',
 					'я',
-					'программирую',
+					'зовут',
+					'Меня',
 					'это',
-					'приложение!',
 				],
-				correctAnswer:
-					'Привет! Меня зовут Максим. Сейчас я программирую это приложение!',
+				correctAnswer: 'Привет! Меня зовут Максим. Сейчас я программирую это приложение!',
 			},
 			{
 				id: 2,
