@@ -10,6 +10,7 @@ import SectionTab from './ui/SectionTab'
 import LevelsSection from './ui/LevelsSection'
 import PathLine from './ui/PathLine'
 import { useDimensions } from '../../hoocs'
+import { COLORS } from '../../constants/theme'
 
 const SECTION_HEIGHT = 700
 
@@ -67,6 +68,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		position: 'relative',
+		backgroundColor: COLORS.gray,
 	},
 
 	scrollContainer: {

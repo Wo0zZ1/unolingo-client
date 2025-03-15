@@ -1,20 +1,20 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native'
 
 import { AppNavigator } from './src/navigation/AppNavigator'
-import { useUserStore } from './src/store/useUserStore'
 import { LoadingScreen } from './src/widgets/ui'
 
 export default function App() {
-	const { fetchUserData, fetching } = useUserStore()
+	const [loading, setLoading] = useState<boolean>(true)
 
 	useEffect(() => {
-		fetchUserData()
-	}, [fetchUserData])
+		setTimeout(() => {
+			setLoading(false)
+		}, 400)
+	}, [])
 
-	if (fetching) {
-		return <LoadingScreen backBtn={false} title={'Загрузка приложения'} />
-	}
+	if (loading) return <LoadingScreen backBtn={false} title={'Загрузка приложения...'} />
+
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
 			<AppNavigator />

@@ -9,15 +9,19 @@ import { RootStackParamList } from '../../navigation/types'
 
 import { useLevelStatsStore } from '../../store/useLevelStatsStore'
 import { useTasksStore } from '../../store/useTasksStore'
-import { useUserStore } from '../../store/useUserStore'
+import { useProfileStore } from '../../store/useProfileStore'
+import { LoadingScreen } from '../../widgets/ui'
 
 const LevelStatsScreen = () => {
 	const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
 
 	const { errors, startTime, endTime, resetStats } = useLevelStatsStore()
 
-	const { experience, experienceToNextLevel, experienceTotal, level, addExperience } =
-		useUserStore()
+	const { profileData, fetching, addExperience } = useProfileStore()
+
+	if (fetching) return <LoadingScreen title='Идёт загрузка данных профиля' />
+
+	const { experience, experienceToNextLevel, experienceTotal, level } = profileData
 
 	const [progress] = useState(new Animated.Value(experience))
 

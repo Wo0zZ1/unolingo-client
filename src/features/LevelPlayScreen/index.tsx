@@ -13,6 +13,7 @@ import { useLevelStatsStore } from '../../store/useLevelStatsStore'
 
 import { Header, LoadingScreen } from '../../widgets/ui'
 import { ProgressBar } from '../../shared/ui'
+import { COLORS } from '../../constants/theme'
 
 const LevelPlayScreen = memo(() => {
 	const route = useRoute<RouteProp<RootStackParamList, 'LevelPlay'>>()
