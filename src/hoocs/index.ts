@@ -1,1 +1,1 @@
-export {useDimensions} from './useDimensions'
+export { useDimensions } from './useDimensions'

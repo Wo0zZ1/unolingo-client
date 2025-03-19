@@ -2,16 +2,15 @@ import * as Haptics from 'expo-haptics'
 import { StyleSheet, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
-import { ILevel } from '../model/levels'
-
 import { NavigationProp } from '../../../navigation/types'
 
 import { PressableButton } from '../../../shared/ui'
+import { ILevelData } from '../../../store/useMapStore'
 
 type TPosition = 'left' | 'mid' | 'right'
 
 interface ILevelCircleProps {
-	level: ILevel
+	level: ILevelData
 	position: TPosition
 }
 

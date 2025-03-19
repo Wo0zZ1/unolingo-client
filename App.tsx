@@ -3,17 +3,20 @@ import { SafeAreaView } from 'react-native'
 
 import { AppNavigator } from './src/navigation/AppNavigator'
 import { LoadingScreen } from './src/widgets/ui'
+import { useProfileStore } from './src/store/useProfileStore'
 
 export default function App() {
-	const [loading, setLoading] = useState<boolean>(true)
+	const [firstRender, setFirstRender] = useState<boolean>(true)
+	const { fetching, fetchProfileData } = useProfileStore()
 
 	useEffect(() => {
-		setTimeout(() => {
-			setLoading(false)
-		}, 400)
+		fetchProfileData()
 	}, [])
 
-	if (loading) return <LoadingScreen backBtn={false} title={'Загрузка приложения...'} />
+	if (firstRender && fetching) {
+		setTimeout(() => setFirstRender(false), 100)
+		return <LoadingScreen backBtn={false} title={'Загрузка приложения...'} />
+	}
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>

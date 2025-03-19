@@ -1,7 +1,9 @@
+import { SvgXml } from 'react-native-svg'
+import { createAvatar } from '@dicebear/core'
+import { avataaars } from '@dicebear/collection'
 import { useCallback, useEffect } from 'react'
 import {
 	FlatList,
-	Image,
 	ListRenderItemInfo,
 	RefreshControl,
 	ScrollView,
@@ -17,9 +19,6 @@ import { ICourseData, useProfileStore } from '../../store/useProfileStore'
 import { LoadingScreen } from '../../widgets/ui'
 
 import { Empty, Separator, CourseBlock } from './ui'
-import { SvgXml } from 'react-native-svg'
-import { createAvatar } from '@dicebear/core'
-import { avataaars } from '@dicebear/collection'
 
 const ProfileScreen = () => {
 	const { profileData, setActiveCourseId, fetching, fetchProfileData } = useProfileStore()
@@ -32,7 +31,7 @@ const ProfileScreen = () => {
 		fetchProfileData()
 	}, [])
 
-	if (!profileData) return <LoadingScreen backBtn={false} title='Идёт загрузка профиля...' />
+	if (!profileData) return <LoadingScreen backBtn={false} title='Загрузка профиля...' />
 
 	const { userName, email, createdAt, courses, activeCourseId } = profileData
 

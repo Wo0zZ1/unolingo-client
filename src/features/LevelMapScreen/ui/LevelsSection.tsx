@@ -1,17 +1,18 @@
 import { StyleSheet, View } from 'react-native'
 
-import { ILevel } from '../model/levels'
-
 import LevelCircle from './LevelCircle'
-import { SectionDivider } from './SectionDivider'
+import SectionDivider from './SectionDivider'
+
 import { useDimensions } from '../../../hoocs'
 
+import { IMapSection } from '../../../store/useMapStore'
+
 export interface ILevelsSectionsProps {
-	levels: ILevel[]
+	sectionData: IMapSection
 	height: number
 }
 
-const LevelsSection = ({ levels, height }: ILevelsSectionsProps) => {
+const LevelsSection = ({ sectionData, height }: ILevelsSectionsProps) => {
 	const { width } = useDimensions()
 
 	const calcLeft = (index: number) => {
@@ -22,16 +23,9 @@ const LevelsSection = ({ levels, height }: ILevelsSectionsProps) => {
 
 	return (
 		<View style={[styles.section, { height, width: width * 0.7 }]}>
-			<SectionDivider
-				width={width * 0.8}
-				sectionName={`Глава ${levels[0].section}`}
-			/>
-			{levels.map((level, i) => (
-				<LevelCircle
-					position={calcLeft(i)}
-					key={level.id}
-					level={level}
-				/>
+			<SectionDivider width={width * 0.8} sectionName={`Глава ${sectionData.section}`} />
+			{sectionData.levelsData.map((level, i) => (
+				<LevelCircle position={calcLeft(i)} key={level.id} level={level} />
 			))}
 		</View>
 	)

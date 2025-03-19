@@ -7,20 +7,10 @@ interface ISectionDividerProps {
 	sectionName: string
 }
 
-export const SectionDivider = ({
-	width,
-	sectionName,
-}: ISectionDividerProps) => (
+const SectionDivider = ({ width, sectionName }: ISectionDividerProps) => (
 	<View style={styles.container}>
 		<Svg style={styles.svg} height='2' width={width}>
-			<Line
-				x1='0'
-				y1='1'
-				x2={width}
-				y2='1'
-				stroke='gray'
-				strokeWidth='2'
-			/>
+			<Line x1='0' y1='1' x2={width} y2='1' stroke='gray' strokeWidth='2' />
 		</Svg>
 		<View style={styles.sectionNameContainer}>
 			<Text style={styles.sectionName}>{sectionName}</Text>
@@ -48,3 +38,5 @@ const styles = StyleSheet.create({
 		color: 'gray',
 	},
 })
+
+export default SectionDivider

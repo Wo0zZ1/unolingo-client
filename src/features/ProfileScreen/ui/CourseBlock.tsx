@@ -2,7 +2,6 @@ import { memo, useCallback } from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { ICourseData } from '../../../store/useProfileStore'
 import { COLORS } from '../../../constants/theme'
-import { SvgUri } from 'react-native-svg'
 
 interface ICourseBlockData {
 	courseData: ICourseData
@@ -20,7 +19,6 @@ const CourseBlock = memo(({ courseData, onPress, active = false }: ICourseBlockD
 			disabled={active}
 			onPress={pressHandler}
 			style={[styles.root, active ? styles.active : '']}>
-			{/* <SvgUri uri={courseData.languageData.img} style={styles.img} /> */}
 			<Image style={styles.img} source={{ uri: courseData.languageData.img }} />
 			<Text style={styles.title}>{courseData.languageData.name}</Text>
 		</TouchableOpacity>
