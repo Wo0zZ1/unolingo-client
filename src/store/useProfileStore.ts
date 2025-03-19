@@ -1,12 +1,13 @@
 import { create } from 'zustand'
 import sleep from '../utils/sleep'
+import { IMapData } from './useMapStore'
 
 export type ILanguageName = 'English' | 'Deutsch' | 'French'
 
 export type ILanguageData = { name: ILanguageName; img: string }
 
 export type ICourseData = {
-	id: number
+	mapId: IMapData['id']
 	languageData: ILanguageData
 }
 
@@ -15,7 +16,7 @@ export type IProfileData = {
 	userName: string
 	email: string
 
-	activeCourseId: ICourseData['id']
+	activeCourseId: ICourseData['mapId']
 	courses: ICourseData[]
 
 	createdAt: Date
@@ -133,7 +134,7 @@ export const useProfileStore = create<ProfileStateStore>(set => ({
 			// const data = await response.json()
 
 			// Mock data
-			console.log(`Типа идет фетчинг профиля`)
+			console.log(`Типа идет фетчинг профиля с id ${'TODO'}`)
 
 			await sleep(1000)
 
@@ -144,14 +145,14 @@ export const useProfileStore = create<ProfileStateStore>(set => ({
 				activeCourseId: 0,
 				courses: [
 					{
-						id: 0,
+						mapId: 0,
 						languageData: {
 							name: 'English',
 							img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/375px-Flag_of_the_United_States.svg.png',
 						},
 					},
 					{
-						id: 1,
+						mapId: 1,
 						languageData: {
 							name: 'Deutsch',
 							img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/800px-Flag_of_Germany.svg.png',

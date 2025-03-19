@@ -44,7 +44,7 @@ const ProfileScreen = () => {
 	const renderTheoryBlock = ({ item }: ListRenderItemInfo<ICourseData>) => (
 		<CourseBlock
 			courseData={item}
-			active={item.id === activeCourseId}
+			active={item.mapId === activeCourseId}
 			onPress={setActiveCourseId}
 		/>
 	)
@@ -68,7 +68,7 @@ const ProfileScreen = () => {
 					data={courses}
 					horizontal
 					contentContainerStyle={styles.coursesContainer}
-					keyExtractor={({ id }) => id.toString()}
+					keyExtractor={({ mapId: id }) => id.toString()}
 					ListEmptyComponent={Empty}
 					renderItem={renderTheoryBlock}
 					ItemSeparatorComponent={Separator}

@@ -13,7 +13,7 @@ export interface ILevelData {
 export type IMapSection = {
 	id: number
 	section: number
-	theoryData: Pick<ITheoryData, 'id' | 'name'>
+	partialTheoryData: Pick<ITheoryData, 'id' | 'name'>
 	levelsData: ILevelData[]
 }
 
@@ -52,47 +52,90 @@ export const useMapStore = create<MapStore>(set => ({
 
 		await sleep(1000)
 
-		const currentMap: IMapData = {
-			id: 1,
-			mapSections: [
-				{
-					id: 0,
-					section: 1,
-					theoryData: { id: 0, name: 'Present Simple' },
-					levelsData: [
-						{ id: 1, isOpened: true, isCompleted: true },
-						{ id: 2, isOpened: true, isCompleted: true },
-						{ id: 3, isOpened: true, isCompleted: true },
-						{ id: 4, isOpened: true, isCompleted: true },
-						{ id: 5, isOpened: true, isCompleted: true },
-					],
-				},
-				{
-					id: 1,
-					section: 2,
-					theoryData: { id: 1, name: 'Past Simple' },
-					levelsData: [
-						{ id: 6, isOpened: true, isCompleted: true },
-						{ id: 7, isOpened: true, isCompleted: true },
-						{ id: 8, isOpened: true, isCompleted: true },
-						{ id: 9, isOpened: true, isCompleted: false },
-						{ id: 11, isOpened: false, isCompleted: false },
-					],
-				},
-				{
-					id: 2,
-					section: 2,
-					theoryData: { id: 2, name: 'Future Simple' },
-					levelsData: [
-						{ id: 10, isOpened: false, isCompleted: false },
-						{ id: 12, isOpened: false, isCompleted: false },
-						{ id: 13, isOpened: false, isCompleted: false },
-						{ id: 14, isOpened: false, isCompleted: false },
-						{ id: 15, isOpened: false, isCompleted: false },
-					],
-				},
-			],
-		}
+		const currentMap: IMapData =
+			mapId === 0
+				? {
+						id: 0,
+						mapSections: [
+							{
+								id: 0,
+								section: 1,
+								partialTheoryData: { id: 0, name: 'Present Simple' },
+								levelsData: [
+									{ id: 1, isOpened: true, isCompleted: true },
+									{ id: 2, isOpened: true, isCompleted: true },
+									{ id: 3, isOpened: true, isCompleted: true },
+									{ id: 4, isOpened: true, isCompleted: true },
+									{ id: 5, isOpened: true, isCompleted: true },
+								],
+							},
+							{
+								id: 1,
+								section: 2,
+								partialTheoryData: { id: 1, name: 'Past Simple' },
+								levelsData: [
+									{ id: 6, isOpened: true, isCompleted: true },
+									{ id: 7, isOpened: true, isCompleted: true },
+									{ id: 8, isOpened: true, isCompleted: true },
+									{ id: 9, isOpened: true, isCompleted: false },
+									{ id: 10, isOpened: false, isCompleted: false },
+								],
+							},
+							{
+								id: 2,
+								section: 3,
+								partialTheoryData: { id: 2, name: 'Future Simple' },
+								levelsData: [
+									{ id: 11, isOpened: false, isCompleted: false },
+									{ id: 12, isOpened: false, isCompleted: false },
+									{ id: 13, isOpened: false, isCompleted: false },
+									{ id: 14, isOpened: false, isCompleted: false },
+									{ id: 15, isOpened: false, isCompleted: false },
+								],
+							},
+						],
+				  }
+				: {
+						id: 1,
+						mapSections: [
+							{
+								id: 5,
+								section: 1,
+								partialTheoryData: { id: 1242, name: 'Немецкий язык 1' },
+								levelsData: [
+									{ id: 1, isOpened: true, isCompleted: true },
+									{ id: 2, isOpened: true, isCompleted: true },
+									{ id: 3, isOpened: true, isCompleted: false },
+									{ id: 4, isOpened: false, isCompleted: false },
+									{ id: 5, isOpened: false, isCompleted: false },
+								],
+							},
+							{
+								id: 165,
+								section: 2,
+								partialTheoryData: { id: 13245, name: 'Немецкий язык 2' },
+								levelsData: [
+									{ id: 6, isOpened: false, isCompleted: false },
+									{ id: 7, isOpened: false, isCompleted: false },
+									{ id: 8, isOpened: false, isCompleted: false },
+									{ id: 9, isOpened: false, isCompleted: false },
+									{ id: 10, isOpened: false, isCompleted: false },
+								],
+							},
+							{
+								id: 24356,
+								section: 3,
+								partialTheoryData: { id: 232453, name: 'Немецкий язык 3' },
+								levelsData: [
+									{ id: 11, isOpened: false, isCompleted: false },
+									{ id: 12, isOpened: false, isCompleted: false },
+									{ id: 13, isOpened: false, isCompleted: false },
+									{ id: 14, isOpened: false, isCompleted: false },
+									{ id: 15, isOpened: false, isCompleted: false },
+								],
+							},
+						],
+				  }
 
 		set({
 			fetching: false,

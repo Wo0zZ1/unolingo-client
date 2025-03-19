@@ -7,3 +7,7 @@ export const COLORS = {
 	grayLight: '#33333312',
 	grayDark: '#33333333',
 } as const
+
+export const SIZES = {
+	SectionTabHeight: 110,
+} as const

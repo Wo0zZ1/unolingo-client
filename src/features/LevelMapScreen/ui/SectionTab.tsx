@@ -2,43 +2,51 @@ import { StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 
-import type { ILevel } from '../model/levels'
-
 import vibrate from '../../../utils/vibrate'
 import { RootStackParamList } from '../../../navigation/types'
 
 import { PressableButton } from '../../../shared/ui'
+import { IMapSection } from '../../../store/useMapStore'
+import { COLORS } from '../../../constants/theme'
+import { useCallback } from 'react'
 
 export interface ISectionTabProps {
-	currentSection: ILevel['section']
+	height: number
+	section: IMapSection['section']
+	partialTheoryData: IMapSection['partialTheoryData']
 }
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Theory'>
 
-const SectionTab = ({ currentSection }: ISectionTabProps) => {
+const SectionTab = ({ height, section, partialTheoryData }: ISectionTabProps) => {
 	const navigation = useNavigation<NavigationProp>()
 
-	const theoryPressIn = () => {
+	const theoryPressIn = useCallback(() => {
 		vibrate('light')
-	}
+	}, [])
 
-	const theoryPress = (section: number) => {
-		console.log(`Нажатие теории для секции: ${section}`)
-		navigation.navigate('Theory', { theoryId: section })
-	}
+	const theoryPress = useCallback(() => {
+		console.log(`Нажатие теории для секции с id: ${partialTheoryData.id}`)
+		navigation.navigate('Theory', { theoryId: partialTheoryData.id })
+	}, [partialTheoryData.id])
 
 	return (
-		<View style={styles.fixedHeader}>
-			<Text style={styles.sectionTitle}>Глава {currentSection}</Text>
-			<PressableButton
-				bgFront={'#ff6347'}
-				bgBack={'#cc4f38'}
-				borderRadius={8}
-				style={styles.theoryButton}
-				onPressIn={theoryPressIn}
-				onPress={() => theoryPress(currentSection)}>
-				<Text style={styles.theoryButtonText}>Теория</Text>
-			</PressableButton>
+		<View style={[styles.fixedHeader, { height: height - 16 * 2 }]}>
+			<View style={styles.textBlock}>
+				<Text style={styles.sectionTitle}>Глава {section}</Text>
+				<Text style={styles.sectionDescription}>{partialTheoryData.name}</Text>
+			</View>
+			<View>
+				<PressableButton
+					bgFront={'#ff6347'}
+					bgBack={'#cc4f38'}
+					borderRadius={8}
+					style={styles.theoryButton}
+					onPressIn={theoryPressIn}
+					onPress={theoryPress}>
+					<Text style={styles.theoryButtonText}>Теория</Text>
+				</PressableButton>
+			</View>
 		</View>
 	)
 }
@@ -67,17 +75,19 @@ const styles = StyleSheet.create({
 			},
 		],
 	},
+	textBlock: {
+		height: '100%',
+	},
 	sectionTitle: {
 		fontSize: 18,
 		fontWeight: 'bold',
 		color: 'tomato',
 	},
-	sectionHeader: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		width: '80%',
-		marginBottom: 10,
+	sectionDescription: {
+		marginTop: 'auto',
+		color: COLORS.text,
+		fontSize: 18,
+		fontWeight: '700',
 	},
 	theoryButton: {
 		padding: 10,

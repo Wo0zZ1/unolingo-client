@@ -11,7 +11,7 @@ interface ICourseBlockData {
 
 const CourseBlock = memo(({ courseData, onPress, active = false }: ICourseBlockData) => {
 	const pressHandler = useCallback(() => {
-		onPress(courseData.id)
+		onPress(courseData.mapId)
 	}, [])
 
 	return (
