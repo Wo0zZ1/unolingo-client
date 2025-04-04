@@ -3,7 +3,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
 import { LevelMapScreen, ProfileScreen, StatsScreen } from '../features'
-import { RootLayout } from './RootLayout'
 import { COLORS } from '../constants/theme'
 import vibrate from '../utils/vibrate'
 
@@ -30,7 +29,6 @@ const tabListeners = {
 
 const MainTabs = () => (
 	<Tab.Navigator
-		layout={RootLayout}
 		screenOptions={({ route }) => ({
 			tabBarIcon: ({ focused, color, size }) => (
 				<Ionicons name={getIconName(route.name, focused)} size={size} color={color} />

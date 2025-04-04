@@ -1,6 +1,7 @@
 import { StackNavigationProp } from '@react-navigation/stack'
 
 export type RootStackParamList = {
+	Login: undefined
 	MainTabs: undefined
 	LevelPlay: { levelId: number }
 	LevelStats: undefined

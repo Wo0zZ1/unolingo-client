@@ -3,6 +3,7 @@ import { createAvatar } from '@dicebear/core'
 import { avataaars } from '@dicebear/collection'
 import { useCallback, useEffect } from 'react'
 import {
+	Button,
 	FlatList,
 	ListRenderItemInfo,
 	RefreshControl,
@@ -19,9 +20,12 @@ import { ICourseData, useProfileStore } from '../../store/useProfileStore'
 import { LoadingScreen } from '../../widgets/ui'
 
 import { Empty, Separator, CourseBlock } from './ui'
+import { $api, useAuth } from '../../navigation/AuthContext'
 
 const ProfileScreen = () => {
 	const { profileData, setActiveCourseId, fetching, fetchProfileData } = useProfileStore()
+
+	const { onLogout } = useAuth()
 
 	const onRefresh = useCallback(() => {
 		fetchProfileData()
@@ -30,6 +34,13 @@ const ProfileScreen = () => {
 	useEffect(() => {
 		fetchProfileData()
 	}, [])
+
+	useEffect(() => {
+		const fetchUsers = async () => {
+			const res = await $api.get('users')
+		}
+		fetchUsers()
+	})
 
 	if (!profileData) return <LoadingScreen backBtn={false} title='Загрузка профиля...' />
 
@@ -73,6 +84,9 @@ const ProfileScreen = () => {
 					renderItem={renderTheoryBlock}
 					ItemSeparatorComponent={Separator}
 				/>
+			</View>
+			<View style={[styles.block]}>
+				<Button onPress={onLogout} title='Выйти из аккаунта' />
 			</View>
 		</ScrollView>
 	)

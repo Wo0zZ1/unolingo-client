@@ -1,16 +1,48 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { useCallback, useEffect } from 'react'
+import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native'
 
-const StatsScreen = () => (
-	<View style={styles.centeredContainer}>
-		<Text>Stats Screen</Text>
-	</View>
-)
+import { useProfileStore } from '../../store/useProfileStore'
+
+import { LoadingScreen } from '../../widgets/ui'
+
+const StatsScreen = () => {
+	const { profileData, fetching, fetchProfileData } = useProfileStore()
+
+	const onRefresh = useCallback(() => {
+		fetchProfileData()
+	}, [fetchProfileData])
+
+	if (!profileData) return <LoadingScreen backBtn={false} title='Загрузка статистики...' />
+
+	const { courses, experienceToNextLevel, experienceTotal, level } = profileData
+
+	return (
+		<ScrollView
+			contentContainerStyle={styles.root}
+			refreshControl={<RefreshControl refreshing={fetching} onRefresh={onRefresh} />}>
+			<Text>Моя статистика:</Text>
+			<View>
+				<View>
+					<Text>Всего опыта: {experienceTotal}</Text>
+				</View>
+				<View>
+					<Text>Опыта до следующего уровня: {experienceToNextLevel}</Text>
+				</View>
+				<View>
+					<Text>Лвл: {level}</Text>
+				</View>
+				<View>
+					<Text>Изучаю языков: {courses.length}</Text>
+				</View>
+			</View>
+		</ScrollView>
+	)
+}
 
 const styles = StyleSheet.create({
-	centeredContainer: {
+	root: {
 		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
+		padding: 20,
 	},
 })
 
