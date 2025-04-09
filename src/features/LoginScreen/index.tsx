@@ -25,30 +25,30 @@ const LoginScreen = () => {
 	const { onLogin, onRegister } = useAuth()
 
 	const { reset: levelStatsReset } = useLevelStatsStore()
-	const { reset: mapRest } = useMapStore()
-	const { reset: tasksRest } = useTasksStore()
-	const { reset: theoryRest } = useTheoryStore()
-	const { reset: userProgressRest } = useUserProgressStore()
-	const { reset: userStatRest } = useUserStatStore()
-	const { reset: userRest } = useUserStore()
-	const { reset: leaderboardRest } = useLeaderboardStore()
+	const { reset: mapReset } = useMapStore()
+	const { reset: tasksReset } = useTasksStore()
+	const { reset: theoryReset } = useTheoryStore()
+	const { reset: userProgressReset } = useUserProgressStore()
+	const { reset: userStatReset } = useUserStatStore()
+	const { reset: userReset } = useUserStore()
+	const { reset: leaderboardReset } = useLeaderboardStore()
 
 	useEffect(() => {
 		return () => {
 			levelStatsReset()
-			mapRest()
-			tasksRest()
-			theoryRest()
-			userProgressRest()
-			userStatRest()
-			userRest()
-			leaderboardRest()
+			mapReset()
+			tasksReset()
+			theoryReset()
+			userProgressReset()
+			userStatReset()
+			userReset()
+			leaderboardReset()
 		}
 	}, [])
 
 	const [form, setForm] = useState<ILoginForm>({
-		username: 'John',
-		password: 'Doe',
+		username: '',
+		password: '',
 		country: 'RU',
 	})
 
@@ -66,51 +66,50 @@ const LoginScreen = () => {
 	}
 
 	return (
-		<View style={{ flex: 1, backgroundColor: '#e8ecf4' }}>
-			<View style={styles.root}>
-				<View style={styles.header}>
-					<View style={styles.headerIcon}>
-						<Ionicons size={44} color={COLORS.tomato} name='lock-closed'></Ionicons>
-					</View>
-					<Text style={styles.title}>
-						Добро пожаловать в <Text style={{ color: COLORS.tomato }}>Unolingo</Text>!
-					</Text>
-					<Text style={styles.subtitle}>Давай изучать языки вместе</Text>
+		<View style={styles.root}>
+			<View style={styles.header}>
+				<View style={styles.headerIcon}>
+					<Ionicons size={44} color={COLORS.tomato} name='lock-closed'></Ionicons>
 				</View>
-				<View style={styles.form}>
-					{/* LOGIN */}
-					<View style={styles.input}>
-						<Text style={styles.inputLabel}>Имя</Text>
-						<TextInput
-							autoCapitalize='none'
-							autoCorrect={false}
-							value={form.username}
-							onChangeText={email => setForm(prev => ({ ...prev, email }))}
-							style={styles.inputControl}
-						/>
+				<Text style={styles.title}>
+					Добро пожаловать в <Text style={{ color: COLORS.tomato }}>Unolingo!</Text>
+				</Text>
+				<Text style={styles.subtitle}>Давай изучать языки вместе</Text>
+			</View>
+
+			<View style={styles.form}>
+				{/* LOGIN */}
+				<View style={styles.input}>
+					<Text style={styles.inputLabel}>Имя</Text>
+					<TextInput
+						autoCapitalize='none'
+						autoCorrect={false}
+						value={form.username}
+						onChangeText={username => setForm(prev => ({ ...prev, username }))}
+						style={styles.inputControl}
+					/>
+				</View>
+				{/* PASSWORD */}
+				<View style={styles.input}>
+					<Text style={styles.inputLabel}>Пароль</Text>
+					<TextInput
+						autoCapitalize='none'
+						autoCorrect={false}
+						value={form.password}
+						onChangeText={password => setForm(prev => ({ ...prev, password }))}
+						style={styles.inputControl}
+					/>
+				</View>
+				<View style={styles.formAction}>
+					<View style={{ alignSelf: 'center', width: '65%' }}>
+						<PressableButton style={styles.btn} withVibrate onPress={logIn}>
+							<Text style={styles.btnText}>Войти</Text>
+						</PressableButton>
 					</View>
-					{/* PASSWORD */}
-					<View style={styles.input}>
-						<Text style={styles.inputLabel}>Пароль</Text>
-						<TextInput
-							autoCapitalize='none'
-							autoCorrect={false}
-							value={form.password}
-							onChangeText={password => setForm(prev => ({ ...prev, password }))}
-							style={styles.inputControl}
-						/>
-					</View>
-					<View style={styles.formAction}>
-						<View style={{ alignSelf: 'center', width: '65%' }}>
-							<PressableButton style={styles.btn} withVibrate onPress={logIn}>
-								<Text style={styles.btnText}>Войти</Text>
-							</PressableButton>
-						</View>
-						<View style={{ alignSelf: 'center', width: '65%', marginTop: 16 }}>
-							<PressableButton style={styles.btn} withVibrate onPress={register}>
-								<Text style={styles.btnText}>Зарегистрироваться</Text>
-							</PressableButton>
-						</View>
+					<View style={{ alignSelf: 'center', width: '65%', marginTop: 16 }}>
+						<PressableButton style={styles.btn} withVibrate onPress={register}>
+							<Text style={styles.btnText}>Зарегистрироваться</Text>
+						</PressableButton>
 					</View>
 				</View>
 			</View>
@@ -122,6 +121,7 @@ const styles = StyleSheet.create({
 	root: {
 		flex: 1,
 		padding: 24,
+		backgroundColor: '#e8ecf4',
 	},
 	header: {
 		marginVertical: 36,
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		inset: 0,
 		zIndex: 9,
-		width: 110,
+		width: 60,
 		lineHeight: 44,
 		marginHorizontal: 12,
 		alignItems: 'center',
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
 	inputControl: {
 		height: 44,
 		backgroundColor: COLORS.white,
-		paddingLeft: 70,
+		paddingLeft: 80,
 		paddingRight: 24,
 		borderRadius: 12,
 		fontSize: 15,

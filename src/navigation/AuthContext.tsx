@@ -139,6 +139,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 			return result
 		} catch (error) {
+			if (error instanceof AxiosError) {
+				if (error.status === 401) return { error: true, msg: 'Неправильный логин или пароль' }
+			}
 			console.log('ошибка:', error)
 			return { error: true, msg: error as any }
 		}
