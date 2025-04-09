@@ -1,13 +1,31 @@
 import { useEffect, useState } from 'react'
 import { Button, Image, StyleSheet, TextInput, View } from 'react-native'
 
-import { $api, API_URL, useAuth } from '../../navigation/AuthContext'
+import { useLeaderboardStore } from '../../store/useLeaderBoardStore'
+
+import { useAuth } from '../../navigation/AuthContext'
 import { COLORS } from '../../constants/theme'
+import { useLevelStatsStore } from '../../store/useLevelStatsStore'
+import { useMapStore } from '../../store/useMapStore'
+import { useTasksStore } from '../../store/useTasksStore'
+import { useTheoryStore } from '../../store/useTheoryStore'
+import { useUserProgressStore } from '../../store/useUserProgressStore'
+import { useUserStatStore } from '../../store/useUserStatStore'
+import { useUserStore } from '../../store/useUserStore'
 
 const LoginScreen = () => {
 	const [login, setLogin] = useState<string>('John')
 	const [password, setPassword] = useState<string>('Doe')
 	const { onLogin, onRegister } = useAuth()
+
+	const { reset: levelStatsReset } = useLevelStatsStore()
+	const { reset: mapRest } = useMapStore()
+	const { reset: tasksRest } = useTasksStore()
+	const { reset: theoryRest } = useTheoryStore()
+	const { reset: userProgressRest } = useUserProgressStore()
+	const { reset: userStatRest } = useUserStatStore()
+	const { reset: userRest } = useUserStore()
+	const { reset: leaderboardRest } = useLeaderboardStore()
 
 	const logIn = async () => {
 		const result = await onLogin!(login, password)
@@ -16,17 +34,23 @@ const LoginScreen = () => {
 	}
 
 	const register = async () => {
-		const result = await onRegister!(login, password)
+		// TODO IMPLEMENT
+		const result = await onRegister!(login, password, 'RU')
 		if (result?.error) alert(result.msg)
 		else logIn()
 	}
 
 	useEffect(() => {
-		const testCall = async () => {
-			const result = await $api.get(`users`)
-			console.log(result)
+		return () => {
+			levelStatsReset()
+			mapRest()
+			tasksRest()
+			theoryRest()
+			userProgressRest()
+			userStatRest()
+			userRest()
+			leaderboardRest()
 		}
-		testCall()
 	}, [])
 
 	return (

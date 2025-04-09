@@ -1,3 +1,4 @@
+import { useCallback, useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
@@ -6,19 +7,18 @@ import vibrate from '../../../utils/vibrate'
 import { RootStackParamList } from '../../../navigation/types'
 
 import { PressableButton } from '../../../shared/ui'
-import { IMapSection } from '../../../store/useMapStore'
 import { COLORS } from '../../../constants/theme'
-import { useCallback } from 'react'
 
 export interface ISectionTabProps {
 	height: number
-	section: IMapSection['section']
-	partialTheoryData: IMapSection['partialTheoryData']
+	chapter: number
+	sectionId: number
+	sectionName: string
 }
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Theory'>
 
-const SectionTab = ({ height, section, partialTheoryData }: ISectionTabProps) => {
+const SectionTab = ({ height, chapter, sectionId, sectionName }: ISectionTabProps) => {
 	const navigation = useNavigation<NavigationProp>()
 
 	const theoryPressIn = useCallback(() => {
@@ -26,15 +26,15 @@ const SectionTab = ({ height, section, partialTheoryData }: ISectionTabProps) =>
 	}, [])
 
 	const theoryPress = useCallback(() => {
-		console.log(`Нажатие теории для секции с id: ${partialTheoryData.id}`)
-		navigation.navigate('Theory', { theoryId: partialTheoryData.id })
-	}, [partialTheoryData.id])
+		// TODO Rename to sectionId
+		navigation.navigate('Theory', { theoryId: sectionId })
+	}, [sectionId])
 
 	return (
 		<View style={[styles.fixedHeader, { height: height - 16 * 2 }]}>
 			<View style={styles.textBlock}>
-				<Text style={styles.sectionTitle}>Глава {section}</Text>
-				<Text style={styles.sectionDescription}>{partialTheoryData.name}</Text>
+				<Text style={styles.sectionTitle}>Глава {chapter}</Text>
+				<Text style={styles.sectionDescription}>{sectionName}</Text>
 			</View>
 			<View>
 				<PressableButton

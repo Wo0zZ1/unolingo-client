@@ -4,16 +4,46 @@ import LevelCircle from './LevelCircle'
 import SectionDivider from './SectionDivider'
 
 import { useDimensions } from '../../../hoocs'
+import { useEffect, useState } from 'react'
+import { $api } from '../../../navigation/AuthContext'
+import { useNavigation } from '@react-navigation/native'
+import { NavigationProp } from '../../../navigation/types'
 
-import { IMapSection } from '../../../store/useMapStore'
-
-export interface ILevelsSectionsProps {
-	sectionData: IMapSection
-	height: number
+// TODO Вынести логику
+export interface ILevel {
+	id: number
+	order: number
 }
 
-const LevelsSection = ({ sectionData, height }: ILevelsSectionsProps) => {
+interface ILevelsSectionsProps {
+	height: number
+	id: number
+	order: number
+	lastUnlockedLevel: number
+}
+
+const LevelsSection = ({ height, id, order, lastUnlockedLevel }: ILevelsSectionsProps) => {
+	const navigation = useNavigation<NavigationProp>()
 	const { width } = useDimensions()
+
+	const [levels, setLevels] = useState<ILevel[] | null>()
+
+	useEffect(() => {
+		const fetchLevels = async () => {
+			const { data } = await $api.get<ILevel[]>(`api/levels/section/${id}`)
+			setLevels(data)
+		}
+		fetchLevels()
+	}, [])
+
+	if (!levels) return
+
+	const pressHandler = (index: number) => {
+		navigation.navigate('LevelPlay', {
+			levelId: levels[index].id,
+			levelGlobalOrder: (order - 1) * 5 + levels[index].order,
+		})
+	}
 
 	const calcLeft = (index: number) => {
 		if (index % 2 == 0) return 'mid'
@@ -23,9 +53,14 @@ const LevelsSection = ({ sectionData, height }: ILevelsSectionsProps) => {
 
 	return (
 		<View style={[styles.section, { height, width: width * 0.7 }]}>
-			<SectionDivider width={width * 0.8} sectionName={`Глава ${sectionData.section}`} />
-			{sectionData.levelsData.map((level, i) => (
-				<LevelCircle position={calcLeft(i)} key={level.id} level={level} />
+			<SectionDivider width={width * 0.8} sectionName={`Глава ${order}`} />
+			{levels.map((level, i) => (
+				<LevelCircle
+					position={calcLeft(i)}
+					key={level.id}
+					onPress={() => pressHandler(i)}
+					opened={(order - 1) * 5 + level.order <= lastUnlockedLevel}
+				/>
 			))}
 		</View>
 	)

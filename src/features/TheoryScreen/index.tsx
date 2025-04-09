@@ -6,7 +6,7 @@ import { Empty, Separator, TheoryBlock } from './ui'
 
 import type { RootStackParamList } from '../../navigation/types'
 
-import { ITheoryBlock, useTheoryStore } from '../../store/useTheoryStore'
+import { ITheoryParagraph, useTheoryStore } from '../../store/useTheoryStore'
 
 import { Header, LoadingScreen } from '../../widgets/ui'
 
@@ -14,26 +14,26 @@ const TheoryScreen = () => {
 	const route = useRoute<RouteProp<RootStackParamList, 'Theory'>>()
 	const { theoryId } = route.params
 
-	const { theoryData, fetching, fetchTheory } = useTheoryStore()
+	const { theoryData, fetchTheory, fetching: theoryFetching } = useTheoryStore()
 
 	const renderTheoryBlock = useCallback(
-		({ item }: ListRenderItemInfo<ITheoryBlock>) => <TheoryBlock {...item} />,
+		({ item }: ListRenderItemInfo<ITheoryParagraph>) => <TheoryBlock {...item} />,
 		[],
 	)
 
 	useEffect(() => {
-		fetchTheory(theoryId)
+		if (!theoryFetching) fetchTheory(theoryId)
 	}, [theoryId])
 
-	if (fetching) return <LoadingScreen title={'Загрузка теории...'} />
+	if (!theoryData) return <LoadingScreen title={'Загрузка теории...'} />
 
 	return (
 		<>
-			<Header underline={true} title={theoryData.name} />
+			<Header underline={true} title={theoryData.title} />
 			<FlatList
 				contentContainerStyle={styles.container}
 				keyExtractor={({ title }) => title}
-				data={theoryData.theoryBlocks}
+				data={theoryData.paragraphs}
 				ListEmptyComponent={Empty}
 				renderItem={renderTheoryBlock}
 				ItemSeparatorComponent={Separator}

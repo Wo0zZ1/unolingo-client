@@ -1,31 +1,17 @@
-import * as Haptics from 'expo-haptics'
 import { StyleSheet, View } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-
-import { NavigationProp } from '../../../navigation/types'
 
 import { PressableButton } from '../../../shared/ui'
-import { ILevelData } from '../../../store/useMapStore'
+import vibrate from '../../../utils/vibrate'
 
 type TPosition = 'left' | 'mid' | 'right'
 
 interface ILevelCircleProps {
-	level: ILevelData
+	opened: boolean
 	position: TPosition
+	onPress: () => void
 }
 
-const LevelCircle = ({ level, position }: ILevelCircleProps) => {
-	const navigation = useNavigation<NavigationProp>()
-
-	const circlePressIn = () => {
-		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-	}
-
-	const circlePress = () => {
-		console.log(`Заупск  уровня с id: ${level.id}`)
-		navigation.navigate('LevelPlay', { levelId: level.id })
-	}
-
+const LevelCircle = ({ opened, position, onPress }: ILevelCircleProps) => {
 	const calcLeft = (position: TPosition) => {
 		if (position === 'mid') return 'center'
 		if (position === 'left') return 'flex-start'
@@ -35,9 +21,9 @@ const LevelCircle = ({ level, position }: ILevelCircleProps) => {
 	return (
 		<View style={{ alignSelf: calcLeft(position) }}>
 			<PressableButton
-				disabled={!level.isOpened}
-				onPressIn={circlePressIn}
-				onPress={circlePress}
+				disabled={!opened}
+				onPressIn={vibrate}
+				onPress={onPress}
 				yOffset={6}
 				borderRadius={'100%'}
 				bgFront={'#ff6347'}

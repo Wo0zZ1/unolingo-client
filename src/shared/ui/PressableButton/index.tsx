@@ -1,4 +1,5 @@
-import { memo, ReactNode, useEffect, useRef } from 'react'
+import * as Haptics from 'expo-haptics'
+import { ReactNode, useRef } from 'react'
 import {
 	Animated,
 	ColorValue,
@@ -8,11 +9,14 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native'
+import vibrate from '../../../utils/vibrate'
+import { COLORS } from '../../../constants/theme'
 
 export interface IPressableButtonProps {
 	onPressIn?: () => void
 	onPressOut?: () => void
 	onPress?: () => void
+	withVibrate?: boolean
 	children: ReactNode
 	bgFront: ColorValue
 	bgBack: ColorValue
@@ -26,6 +30,7 @@ const PressableButton = ({
 	onPressIn = () => {},
 	onPressOut = () => {},
 	onPress = () => {},
+	withVibrate = false,
 	children,
 	bgFront,
 	bgBack,
@@ -38,7 +43,7 @@ const PressableButton = ({
 
 	const handlePressIn = () => {
 		if (disabled) return
-
+		withVibrate && vibrate('light')
 		onPressIn()
 		Animated.timing(translateY, {
 			toValue: 0,
@@ -49,7 +54,6 @@ const PressableButton = ({
 
 	const handlePressOut = () => {
 		if (disabled) return
-
 		onPressOut()
 		Animated.timing(translateY, {
 			toValue: -yOffset,

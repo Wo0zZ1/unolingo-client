@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native'
 
 import CheckButton from './CheckButton'
 import DraggableWord from './DraggableWord'
-import AvailableWords from './AvailableWords'
 
 export interface IWord {
 	id: number
@@ -17,8 +16,8 @@ interface IWordPickerProps {
 	onComplete: (isCorrect: boolean) => void
 }
 
-const WordPicker = memo(({ correctAnswer, options, onComplete }: IWordPickerProps) => {
-	const [words, setWords] = useState<IWord[]>(() =>
+const WordPicker = ({ correctAnswer, options, onComplete }: IWordPickerProps) => {
+	const [words, setWords] = useState<IWord[]>(
 		options
 			.map((option, index) => ({ id: index, text: option, selected: false }))
 			.sort((a, b) => a.id - b.id),
@@ -53,7 +52,12 @@ const WordPicker = memo(({ correctAnswer, options, onComplete }: IWordPickerProp
 
 	const handleSubmit = useCallback(() => {
 		// TODO Выполнить преобразование строки (trim, replace...)
-		onComplete(selectedWords.map(word => word.text).join(' ') === correctAnswer)
+		onComplete(
+			selectedWords
+				.map(word => word.text)
+				.join(' ')
+				.replaceAll(" '", "'") === correctAnswer,
+		)
 	}, [onComplete, words])
 
 	return (
@@ -85,7 +89,7 @@ const WordPicker = memo(({ correctAnswer, options, onComplete }: IWordPickerProp
 			/>
 		</View>
 	)
-})
+}
 
 const styles = StyleSheet.create({
 	root: {

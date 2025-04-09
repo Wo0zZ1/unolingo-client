@@ -1,12 +1,12 @@
 import { memo, useCallback, useRef, useState } from 'react'
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 
-import { ITask, ITaskTextInput } from '../../../store/useTasksStore'
+import { ITaskData } from '../../../store/useTasksStore'
 import CheckButton from './CheckButton'
 
 interface ITextInputTaskProps {
-	partialAnswer: ITaskTextInput['partialAnswer']
-	correctAnswer: ITask['correctAnswer']
+	partialAnswer: ITaskData['partialAnswer']
+	correctAnswer: ITaskData['correctAnswer']
 	onComplete: (isCorrect: boolean) => void
 }
 
@@ -21,7 +21,10 @@ const TextInputTask = ({ partialAnswer, correctAnswer, onComplete }: ITextInputT
 	}, [])
 
 	const parseInput = useCallback((str: string) => {
-		return str.trim().replaceAll(/ +/g, ' ').toLowerCase()
+		return (partialAnswer[0] + ' ' + str + ' ' + partialAnswer[1])
+			.trim()
+			.replaceAll(/ +/g, ' ')
+			.toLowerCase()
 	}, [])
 
 	const handleSubmit = useCallback(() => {
@@ -35,7 +38,7 @@ const TextInputTask = ({ partialAnswer, correctAnswer, onComplete }: ITextInputT
 				<Text
 					onLayout={event => setHiddenInputWidth(event.nativeEvent.layout.width)}
 					style={[styles.text, styles.inputText, { position: 'absolute', opacity: 0 }]}>
-					{correctAnswer}
+					{correctAnswer.replace(partialAnswer[0], '').replace(partialAnswer[1], '')}
 				</Text>
 
 				<TextInput

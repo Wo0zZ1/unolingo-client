@@ -1,16 +1,16 @@
 import { memo } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
-import { ITheoryBlock } from '../../../store/useTheoryStore'
+import { ITheoryParagraph } from '../../../store/useTheoryStore'
 
-const TheoryBlock = memo(({ title, paragraphs }: ITheoryBlock) => {
+const TheoryBlock = memo(({ title, items }: ITheoryParagraph) => {
 	return (
 		<View>
 			<Text style={styles.title}>{title}</Text>
-			{paragraphs.map((paragraph, index) => (
+			{items.map((item, index) => (
 				<Text key={index} style={styles.text}>
 					{'\t'}
-					{paragraph}
+					{item}
 				</Text>
 			))}
 		</View>

@@ -10,21 +10,19 @@ const Tab = createBottomTabNavigator()
 
 const getIconName = (routeName: string, focused: boolean) => {
 	switch (routeName) {
-		case 'Map':
+		case 'Карта':
 			return focused ? 'map' : 'map-outline'
-		case 'Stats':
+		case 'Статистика':
 			return focused ? 'stats-chart' : 'stats-chart-outline'
-		case 'Profile':
+		case 'Профиль':
 			return focused ? 'person' : 'person-outline'
 		default:
 			return 'home'
 	}
 }
 
-const tabClickHandler = () => vibrate('medium')
-
 const tabListeners = {
-	tabPress: tabClickHandler,
+	tabPress: () => vibrate('medium'),
 }
 
 const MainTabs = () => (
@@ -37,9 +35,9 @@ const MainTabs = () => (
 			tabBarActiveTintColor: 'tomato',
 			tabBarInactiveTintColor: 'gray',
 		})}>
-		<Tab.Screen listeners={tabListeners} name='Map' component={LevelMapScreen} />
-		<Tab.Screen listeners={tabListeners} name='Stats' component={StatsScreen} />
-		<Tab.Screen listeners={tabListeners} name='Profile' component={ProfileScreen} />
+		<Tab.Screen listeners={tabListeners} name='Карта' component={LevelMapScreen} />
+		<Tab.Screen listeners={tabListeners} name='Статистика' component={StatsScreen} />
+		<Tab.Screen listeners={tabListeners} name='Профиль' component={ProfileScreen} />
 	</Tab.Navigator>
 )
 

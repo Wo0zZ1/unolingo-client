@@ -12,36 +12,43 @@ import { COLORS, SIZES } from '../../constants/theme'
 
 import { useDimensions } from '../../hoocs'
 import { useMapStore } from '../../store/useMapStore'
-import { useProfileStore } from '../../store/useProfileStore'
+import { useUserProgressStore } from '../../store/useUserProgressStore'
 
 const SECTION_HEIGHT = 700
 
 const LevelMapScreen = memo(() => {
 	// TODO Сделать прокрут страницы к последнему непройденному уровню
 	const scrollViewRef = useRef<ScrollView>(null)
-
 	const { height } = useDimensions()
 
-	const currentCourseId = useProfileStore(state => state.profileData?.activeCourseId)
-	const { mapData, fetching, fetchMap } = useMapStore()
+	const {
+		userProgressData,
+		fetchUserProgressData,
+		fetching: userProgressFetching,
+	} = useUserProgressStore()
+	const { mapData, fetching: mapDataFetching, fetchMapData } = useMapStore()
 
-	const [currentSection, setCurrentSection] = useState<number>(0)
+	const [currentSectionIndex, setCurrentSectionIndex] = useState<number>(0)
 
 	useEffect(() => {
-		if (typeof currentCourseId === 'undefined') return
-		setCurrentSection(0)
-		fetchMap(currentCourseId)
-	}, [currentCourseId])
+		fetchUserProgressData()
+		fetchMapData(userProgressData.lastSelectedLanguageId)
+	}, [])
+
+	useEffect(() => {
+		setCurrentSectionIndex(0)
+		fetchMapData(userProgressData.lastSelectedLanguageId)
+	}, [userProgressData.lastSelectedLanguageId, setCurrentSectionIndex])
 
 	const handleScroll = useCallback(
 		(event: { nativeEvent: NativeScrollEvent }) => {
-			if (fetching) return
+			if (userProgressFetching || mapDataFetching) return
 			const scrollY = event.nativeEvent.contentOffset.y
 			const newSection = Math.min(
 				Math.max(0, Math.floor((scrollY + height / 6) / (SECTION_HEIGHT + 20))),
-				mapData.mapSections.length,
+				sections.length,
 			)
-			setCurrentSection(prev => {
+			setCurrentSectionIndex(prev => {
 				if (prev !== newSection) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
 				return newSection
 			})
@@ -49,24 +56,46 @@ const LevelMapScreen = memo(() => {
 		[mapData, height],
 	)
 
-	if (fetching || typeof currentCourseId === 'undefined')
-		return <LoadingScreen backBtn={false} title={'Загрузка карты...'} />
+	const { userProgresses, lastSelectedLanguageId } = userProgressData
+
+	if (!lastSelectedLanguageId) return <LoadingScreen backBtn={false} title='Выберите курс' />
+
+	if (!userProgresses || !mapData)
+		return <LoadingScreen backBtn={false} title='Загрузка карты...' />
+
+	const { sections } = mapData
+
+	const currentUserProgress = userProgresses.find(
+		progress => progress.languageId === lastSelectedLanguageId,
+	)
+
+	const currentSection = sections.find(section => section.order === currentSectionIndex + 1)
+
+	if (!currentUserProgress || !currentSection)
+		return <LoadingScreen backBtn={false} title='Произошла ошибка' />
 
 	return (
 		<View style={styles.container}>
 			<SectionTab
 				height={SIZES.SectionTabHeight}
-				section={mapData.mapSections[currentSection].section}
-				partialTheoryData={mapData.mapSections[currentSection].partialTheoryData}
+				chapter={currentSection.order}
+				sectionId={currentSection.id}
+				sectionName={currentSection.name}
 			/>
 			<ScrollView
 				ref={scrollViewRef}
 				contentContainerStyle={{ marginTop: SIZES.SectionTabHeight }}
 				onScroll={handleScroll}
 				scrollEventThrottle={16}>
-				<PathLine sectionHeight={SECTION_HEIGHT} sectionsCount={mapData.mapSections.length} />
-				{mapData.mapSections.map((section, index) => (
-					<LevelsSection key={index} sectionData={section} height={SECTION_HEIGHT} />
+				<PathLine sectionHeight={SECTION_HEIGHT} sectionsCount={sections.length} />
+				{sections.map(section => (
+					<LevelsSection
+						key={section.id}
+						id={section.id}
+						lastUnlockedLevel={currentUserProgress.lastUnlockedLevel}
+						order={section.order}
+						height={SECTION_HEIGHT}
+					/>
 				))}
 			</ScrollView>
 		</View>

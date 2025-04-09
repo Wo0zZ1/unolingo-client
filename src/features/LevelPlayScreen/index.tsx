@@ -13,32 +13,42 @@ import { useLevelStatsStore } from '../../store/useLevelStatsStore'
 
 import { Header, LoadingScreen } from '../../widgets/ui'
 import { ProgressBar } from '../../shared/ui'
-import { COLORS } from '../../constants/theme'
 
 const LevelPlayScreen = memo(() => {
 	const route = useRoute<RouteProp<RootStackParamList, 'LevelPlay'>>()
 	const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'LevelPlay'>>()
 
-	const { levelId } = route.params
+	const { levelId, levelGlobalOrder } = route.params
 
-	const { tasks, fetching, fetchTasks } = useTasksStore()
-
-	const [currentTaskIndex, setCurrentTaskIndex] = useState<number>(0)
-
-	const currentTask = tasks[currentTaskIndex]
+	const { tasksData, fetching: tasksFetching, fetchTasks } = useTasksStore()
 
 	const { incrementErrors, startTimer, stopTimer } = useLevelStatsStore()
 
 	useEffect(() => {
-		fetchTasks(levelId)
-		startTimer()
-	}, [])
+		if (!tasksFetching) fetchTasks(levelId)
+	}, [levelId])
+
+	useEffect(() => {
+		if (tasksData) startTimer()
+	}, [tasksFetching])
+
+	const [currentTaskIndex, setCurrentTaskIndex] = useState<number>(1)
+
+	if (!tasksData || tasksFetching) return <LoadingScreen title='Загрузка уровня...' />
+
+	const currentTask = tasksData.find(task => task.order === currentTaskIndex)
+
+	if (!currentTask) return <LoadingScreen title='Не удалось найти задание' />
 
 	const handleTaskComplete = (isCorrect: boolean) => {
 		if (isCorrect) {
-			if (currentTaskIndex + 1 === tasks.length) {
+			if (currentTaskIndex === tasksData.length) {
 				stopTimer()
-				navigation.navigate('LevelStats')
+				navigation.navigate('LevelStats', {
+					levelId,
+					levelGlobalOrder,
+					tasksLength: tasksData.length,
+				})
 			} else setCurrentTaskIndex(prev => prev + 1)
 		} else {
 			incrementErrors()
@@ -46,15 +56,13 @@ const LevelPlayScreen = memo(() => {
 		}
 	}
 
-	if (fetching) return <LoadingScreen title={'Идет поиск заданий...'} />
-
 	return (
 		<>
 			<Header>
 				<ProgressBar
 					style={styles.bar}
-					from={(currentTaskIndex - 1) / tasks.length}
-					to={currentTaskIndex / tasks.length}
+					from={(currentTaskIndex - 2) / tasksData.length}
+					to={(currentTaskIndex - 1) / tasksData.length}
 				/>
 			</Header>
 			<View style={styles.container}>
@@ -66,7 +74,7 @@ const LevelPlayScreen = memo(() => {
 					style={styles.content}
 					behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 					keyboardVerticalOffset={120}>
-					{currentTask.type === 'wordPicker' ? (
+					{currentTask.type === 'WORD_PICKER' ? (
 						<WordPicker
 							options={currentTask.options}
 							correctAnswer={currentTask.correctAnswer}

@@ -1,83 +1,44 @@
 import { create } from 'zustand'
-import sleep from '../utils/sleep'
 
-export interface ITaskWordPicker {
-	type: 'wordPicker'
-	options: string[]
-}
+import { $api } from '../navigation/AuthContext'
 
-export interface ITaskTextInput {
-	type: 'textInput'
-	partialAnswer: [string, string]
-}
+export type ITaskType = 'WORD_PICKER' | 'TEXT_INPUT'
 
-export type ITask = (ITaskWordPicker | ITaskTextInput) & {
+export interface ITaskData {
 	id: number
+	type: ITaskType
 	question: string
 	correctAnswer: string
+	options: string[]
+	partialAnswer: string[]
+	order: number
 }
 
-type TasksStore = {
-	tasks: ITask[]
+export type ITasksState = {
+	tasksData: ITaskData[] | null
 	fetching: boolean
+}
 
+type TasksStore = ITasksState & {
 	fetchTasks: (levelId: number) => Promise<void>
+	reset: () => void
 }
 
 export const useTasksStore = create<TasksStore>(set => ({
-	tasks: [],
-	fetching: true,
+	tasksData: null,
+	fetching: false,
 
-	fetchTasks: async levelId => {
+	fetchTasks: async (levelId: number) => {
 		set(prev => ({ ...prev, fetching: true }))
 
-		// TODO Подключить сервер
-		// const response = await fetch('https://api.example.com/user')
-		// const data = await response.json()
-
-		// Mock data
-		console.log(`Типа идет фетчинг заданий для уровня с id ${levelId}`)
-
-		await sleep(1000)
-
-		const currentTasks: ITask[] = [
-			{
-				id: 0,
-				type: 'textInput',
-				question: 'Я хочу чашку кофе.',
-				partialAnswer: ['I would like a', '.'],
-				correctAnswer: 'cup of coffee',
-			},
-			{
-				id: 1,
-				type: 'wordPicker',
-				question: "Hello! My name is Max. Now, I'm programming this application!",
-				options: [
-					'Максим.',
-					'Привет!',
-					'приложение!',
-					'программирую',
-					'Сейчас',
-					'я',
-					'зовут',
-					'Меня',
-					'это',
-				],
-				correctAnswer: 'Привет! Меня зовут Максим. Сейчас я программирую это приложение!',
-			},
-			{
-				id: 2,
-				type: 'textInput',
-				question: 'Я люблю программировать.',
-				partialAnswer: ['I', 'programming.'],
-				correctAnswer: 'like',
-			},
-		]
+		const { data } = await $api.get<ITaskData[]>(`/api/tasks/level/${levelId}`)
 
 		set(prev => ({
 			...prev,
 			fetching: false,
-			tasks: currentTasks,
+			tasksData: data,
 		}))
 	},
+
+	reset: () => set(() => ({ tasksData: null, fetching: false })),
 }))

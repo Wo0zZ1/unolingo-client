@@ -1,69 +1,86 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Animated } from 'react-native'
-import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import { RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-
-import ContinueButton from './ui/ContinueButton'
 
 import { RootStackParamList } from '../../navigation/types'
 
+import ContinueButton from './ui/ContinueButton'
 import { useLevelStatsStore } from '../../store/useLevelStatsStore'
-import { useTasksStore } from '../../store/useTasksStore'
-import { useProfileStore } from '../../store/useProfileStore'
+import { useUserStatStore } from '../../store/useUserStatStore'
 import { LoadingScreen } from '../../widgets/ui'
+import { useMapStore } from '../../store/useMapStore'
+import { useUserProgressStore } from '../../store/useUserProgressStore'
 
 const LevelStatsScreen = () => {
-	const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
+	const route = useRoute<RouteProp<RootStackParamList, 'LevelStats'>>()
+	const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'LevelStats'>>()
 
-	const { errors, startTime, endTime, resetStats } = useLevelStatsStore()
+	const { levelId, levelGlobalOrder, tasksLength } = route.params
 
-	const { profileData, fetching, addExperience } = useProfileStore()
+	const {
+		levelStatsData,
+		levelStatsResponse,
+		fetchResult,
+		reset,
+		fetching: levelStatsFetching,
+	} = useLevelStatsStore()
+	const { fetchMapData } = useMapStore()
+	const { userProgressData } = useUserProgressStore()
+	const { userStatData, fetchUserStatData, fetching: userStatFetching } = useUserStatStore()
 
-	if (fetching) return <LoadingScreen title='Идёт загрузка данных профиля' />
+	useEffect(() => {
+		if (!levelStatsResponse) {
+			fetchResult(levelStatsData, levelId, levelGlobalOrder)
+			if (userProgressData?.lastSelectedLanguageId) {
+				// TODO ПРОДОЛЖИТЬ
+				console.log(123)
+				fetchMapData(userProgressData.lastSelectedLanguageId)
+			}
+		}
+	}, [])
 
-	const { experience, experienceToNextLevel, experienceTotal, level } = profileData
+	useEffect(() => {
+		if (levelStatsResponse) fetchUserStatData()
+	}, [levelStatsResponse])
 
-	const [progress] = useState(new Animated.Value(experience))
-
-	const { tasks } = useTasksStore()
-
-	const errorPercentage = Math.min(1, errors / tasks.length) * 100
-	const timeSpent = (endTime! - startTime!) / 1000
-
-	// TODO Откорректировать формулу
-	// Формула начисления опыта
-	const awardedExperience = Math.round(
-		((100 - errorPercentage) / 100) * Math.max(0, 1 - timeSpent / 60 / 3) * 100,
-	)
-
-	const [oldData, setOldData] = useState<{
-		experience: number
-		experienceToNextLevel: number
-		level: number
-	}>()
-
-	useFocusEffect(
-		useCallback(() => {
-			setOldData({
-				experience,
-				experienceToNextLevel,
-				level,
-			})
-
+	useEffect(() => {
+		if (levelStatsResponse && userStatData)
 			Animated.timing(progress, {
-				toValue: Math.min(experience + awardedExperience, experience + experienceToNextLevel),
-				duration: 1000,
+				toValue: levelUp ? 1 : experience / experienceToNextLevel,
+				duration: 1500,
 				useNativeDriver: false,
 			}).start()
+	}, [levelStatsResponse, userStatData])
 
-			addExperience(awardedExperience)
-		}, []),
-	)
+	const [progress] = useState(new Animated.Value(0))
 
 	const handleDone = () => {
-		resetStats()
+		reset()
 		navigation.navigate('MainTabs')
 	}
+
+	if (
+		!levelStatsResponse ||
+		!levelStatsData ||
+		!userStatData ||
+		levelStatsFetching ||
+		userStatFetching
+	)
+		return <LoadingScreen backBtn={false} title='Идёт загрузка результатов' />
+
+	const { experience, experienceToNextLevel, levelUp } = levelStatsResponse
+	const { errors, startTime, endTime } = levelStatsData
+	const { level } = userStatData
+
+	const errorPercentage = Math.min(1, errors / tasksLength) * 100
+	const timeSpent = (endTime! - startTime!) / 1000
+
+	console.log('experience:', experience)
+	console.log('experienceToNextLevel:', experienceToNextLevel)
+	console.log('levelUp:', levelUp)
+	console.log('errors:', errors)
+	console.log('level:', level)
 
 	return (
 		<View style={styles.root}>
@@ -74,7 +91,7 @@ const LevelStatsScreen = () => {
 					Ошибки: {errors} ({errorPercentage.toFixed(0)}%)
 				</Text>
 				<Text style={styles.statText}>Время: {timeSpent.toFixed(0)} сек</Text>
-				<Text style={styles.statText}>заработанный опыт: {awardedExperience} XP</Text>
+				<Text style={styles.statText}>заработанный опыт: {experience} XP</Text>
 			</View>
 
 			<View style={styles.progressContainer}>
@@ -85,10 +102,7 @@ const LevelStatsScreen = () => {
 							styles.progressBar,
 							{
 								width: progress.interpolate({
-									inputRange: [
-										0,
-										(oldData?.experience || 0) + (oldData?.experienceToNextLevel || 0),
-									],
+									inputRange: [0, 1],
 									outputRange: ['0%', '100%'],
 								}),
 							},
@@ -99,7 +113,7 @@ const LevelStatsScreen = () => {
 
 			<View
 				style={{
-					display: oldData?.level !== level ? 'flex' : 'none',
+					display: levelUp ? 'flex' : 'none',
 				}}>
 				<Text style={styles.statText}>NEW {level} LEVEL!</Text>
 			</View>

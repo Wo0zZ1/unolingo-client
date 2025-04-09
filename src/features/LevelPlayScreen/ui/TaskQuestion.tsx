@@ -1,16 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native'
 
-import { ITask } from '../../../store/useTasksStore'
-
+import { ITaskData } from '../../../store/useTasksStore'
 
 interface ITaskQuestionProps {
-	type: ITask['type']
-	question: ITask['question']
+	type: ITaskData['type']
+	question: ITaskData['question']
 }
 const TaskQuestion = ({ type, question }: ITaskQuestionProps) => (
 	<View style={styles.root}>
 		<Text style={styles.title}>
-			{type === 'wordPicker' ? 'Переведите предложение' : 'Дополните перевод'}
+			{type === 'WORD_PICKER' ? 'Переведите предложение' : 'Дополните перевод'}
 		</Text>
 		<View style={styles.cloud}>
 			<Text style={styles.text}>{question}</Text>

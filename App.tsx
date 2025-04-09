@@ -3,18 +3,17 @@ import { SafeAreaView } from 'react-native'
 
 import { AppNavigator } from './src/navigation/AppNavigator'
 import { LoadingScreen } from './src/widgets/ui'
-import { useProfileStore } from './src/store/useProfileStore'
 import { AuthProvider, useAuth } from './src/navigation/AuthContext'
 import { LoginScreen } from './src/features'
+import { useUserStore } from './src/store/useUserStore'
 
 const Layout = () => {
 	const { authState } = useAuth()
 	const [firstRender, setFirstRender] = useState(true)
-	const { fetching, fetchProfileData } = useProfileStore()
+	const { fetching, fetchUserData } = useUserStore()
 
 	useEffect(() => {
-		console.log(authState)
-		if (authState?.authenticated) fetchProfileData()
+		if (authState?.authenticated) fetchUserData()
 	}, [authState])
 
 	if (typeof authState!.authenticated === 'undefined')

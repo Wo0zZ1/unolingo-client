@@ -1,98 +1,42 @@
 import { create } from 'zustand'
 
-import sleep from '../utils/sleep'
+import { $api } from '../navigation/AuthContext'
 
-export type ITheoryBlock = {
+export type ITheoryParagraph = {
 	title: string
-	paragraphs: string[]
+	items: string[]
 }
 
 export type ITheoryData = {
 	id: number
-	name: string
-	theoryBlocks: ITheoryBlock[]
+	title: string
+	paragraphs: ITheoryParagraph[]
 }
 
-type ITheoryStatePending = {
-	theoryData: null
-	fetching: true
+type ITheoryState = {
+	theoryData: ITheoryData | null
+	fetching: boolean
 }
 
-type ITheoryStateFullfield = {
-	theoryData: ITheoryData
-	fetching: false
-}
-
-type TheoryStore = (ITheoryStatePending | ITheoryStateFullfield) & {
+type TheoryStore = ITheoryState & {
 	fetchTheory: (theoryId: number) => Promise<void>
+	reset: () => void
 }
 
 export const useTheoryStore = create<TheoryStore>(set => ({
 	theoryData: null,
-	fetching: true,
+	fetching: false,
 
-	fetchTheory: async theoryId => {
+	fetchTheory: async (sectionId: number) => {
 		set({ theoryData: null, fetching: true })
 
-		// TODO Подключить сервер
-		// const response = await fetch('https://api.example.com/theory/id')
-		// const data = await response.json()
-
-		// Mock data
-		console.log(`Типа идет фетчинг теории для секции с id ${theoryId}`)
-
-		await sleep(1000)
-
-		const currentTheory: ITheoryData =
-			theoryId === 0
-				? {
-						id: 0,
-						name: 'Present Simple',
-						theoryBlocks: [
-							{
-								title: 'Когда используется:',
-								paragraphs: [
-									'Present Simple используется для описания регулярных действий...',
-									'Как я могу написать теорию по грамматике языка, которого я вообще не знаю?',
-									'Наверное, я делаю что-то не так в этой жизни',
-								],
-							},
-							{
-								title: 'Примеры:',
-								paragraphs: [
-									'Я пример 1...',
-									'А я пример два баляяяяяяяяяя я пример два баляяяяяяяяяя я пример два баляяяяяяяяяя...',
-									'Используйте выаываываыавх случааыфваях, когда уааааааааааааа...',
-								],
-							},
-						],
-				  }
-				: {
-						id: 1,
-						name: 'Past Simple',
-						theoryBlocks: [
-							{
-								title: 'Когда используется:',
-								paragraphs: [
-									'Past Simple используется для описания завершенных действий...',
-									'Он часто фываы аыв аыва ыв...',
-									'Используйте Past Simple только в тех случаях, когда...',
-								],
-							},
-							{
-								title: 'Примеры:',
-								paragraphs: [
-									'Я пример 1...',
-									'А я пример два баляяяяяяяяяя аваыф я пример два баляяяяяяяяяя аваыфвааываыфвыавОн час я пример два баляяяяяяяяяя аваыфвааываыфвыавОн час я пример два баляяяяяяяяяя аваыфвааываыфвыавОн часвааываыфвыавОн часто фываы аыв аыва ыв...',
-									'Используйте выаываываыавх случааыфваях, когда...',
-								],
-							},
-						],
-				  }
+		const { data } = await $api.get<ITheoryData>(`/api/theory/section/${sectionId}`)
 
 		set({
 			fetching: false,
-			theoryData: currentTheory,
+			theoryData: data,
 		})
 	},
+
+	reset: () => set(() => ({ theoryData: null, fetching: false })),
 }))

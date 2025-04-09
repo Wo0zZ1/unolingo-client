@@ -1,6 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import axios from 'axios'
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import axios, { AxiosError } from 'axios'
+import { ILanguage } from '../features'
+import { LanguageCode } from '../store/useUserStore'
 
 interface IAuthState {
 	token: string | null
@@ -8,19 +10,20 @@ interface IAuthState {
 }
 
 interface AuthProps {
-	onRegister?: (email: string, password: string) => Promise<any>
+	onRegister?: (email: string, password: string, language: LanguageCode) => Promise<any>
 	onLogin?: (email: string, password: string) => Promise<any>
 	onLogout?: () => Promise<any>
 	authState?: IAuthState
 }
 
-export const API_URL = 'http://192.168.0.115:3000/api/'
 const TOKEN_KEY = 'jwt'
 const AuthContext = createContext<AuthProps>({})
 
+console.log(process.env.EXPO_PUBLIC_API_URL + '/')
+
 export const $api = axios.create({
 	withCredentials: true,
-	baseURL: API_URL,
+	baseURL: process.env.EXPO_PUBLIC_API_URL + '/',
 })
 
 export const useAuth = () => {
@@ -36,27 +39,48 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	useEffect(() => {
 		const interceprotId = $api.interceptors.response.use(
 			config => {
-				// TODO DEBUG
-				console.log(config.data)
+				console.log(`URL: ${config.config.url}:`, config.data)
 				return config
 			},
 			async error => {
-				// TODO DEBUG
 				console.log(error)
-				if (error.response.status === 401 && error.config) value.onLogout!()
-				throw error
+
+				const originalRequest = error.config
+
+				if (error.response.status === 401) {
+					if (originalRequest && !originalRequest._isRetry)
+						try {
+							originalRequest._isRetry = true
+							console.log(`URL: ${process.env.EXPO_PUBLIC_API_URL}/api/auth/refresh`)
+							const response = await axios.post(
+								`${process.env.EXPO_PUBLIC_API_URL}/api/auth/refresh`,
+								{},
+								{
+									withCredentials: true,
+								},
+							)
+							console.log(`Новый рефреш токен: ${response.data.accessToken}`)
+							await AsyncStorage.setItem(TOKEN_KEY, response.data.accessToken)
+							originalRequest.headers.Authorization = `Bearer ${response.data.accessToken}`
+							$api.defaults.headers.common.Authorization = `Bearer ${response.data.accessToken}`
+							return await $api.request(originalRequest)
+						} catch (refreshError) {
+							console.log('Ошибка обновления токена:', refreshError)
+							// if (error.config?.onLogout) error.config.onLogout()
+							return value.onLogout!()
+						}
+					else return value.onLogout!()
+				}
+				Promise.reject(error)
 			},
 		)
 
 		const loadToken = async () => {
 			const token = await AsyncStorage.getItem(TOKEN_KEY)
-			console.log('stored:', token)
 
 			if (token) {
 				$api.defaults.headers.common.Authorization = `Bearer ${token}`
-
-				await $api.post('auth/check')
-
+				await $api.post('api/auth/check')
 				setAuthState({
 					token: token,
 					authenticated: true,
@@ -74,17 +98,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		}
 	}, [])
 
-	const register = async (login: string, password: string) => {
+	const register = async (login: string, password: string, language: LanguageCode) => {
 		try {
-			return await $api.post(`auth/register`, { username: login, password })
+			// TODO Переделать
+			const { data } = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/api/auth/register`, {
+				username: login,
+				password,
+				language: 'RU',
+			})
+
+			value.onLogin!(login, password)
+			return { error: false, msg: 'succeess' }
 		} catch (error) {
-			return { error: true, msg: (error as any).response.data.msg }
+			console.log('error:', error)
+			if (error instanceof AxiosError) {
+				if (error.status === 409)
+					return { error: true, msg: 'Аккаунт с таким именем уже существует' }
+			}
+			return { error: true, msg: 'Произошла непредвиденная ошибка' }
 		}
 	}
 
 	const login = async (login: string, password: string) => {
 		try {
-			const result = await $api.post(`auth/login`, {
+			console.log(`URL: ${process.env.EXPO_PUBLIC_API_URL}/api/auth/login`)
+
+			const result = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/api/auth/login`, {
 				username: login,
 				password,
 			})
@@ -100,7 +139,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 			return result
 		} catch (error) {
-			console.log('error:', error)
+			console.log('ошибка:', error)
 			return { error: true, msg: error as any }
 		}
 	}
@@ -108,15 +147,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const logout = async () => {
 		try {
 			await AsyncStorage.removeItem(TOKEN_KEY)
-
 			$api.defaults.headers.common.Authorization = ''
-
 			setAuthState({
 				token: null,
 				authenticated: false,
 			})
+			console.log(`URL: ${process.env.EXPO_PUBLIC_API_URL}/api/auth/logout`)
+			const response = await axios.post(
+				`${process.env.EXPO_PUBLIC_API_URL}/api/auth/logout`,
+				{},
+				{
+					withCredentials: true,
+				},
+			)
+			console.log(`Результат выхода из аккаунта: ${response.data}`)
 		} catch (error) {
-			console.log('error:', error)
+			console.log('ошибка:', error)
 			return { error: true, msg: (error as any).response.data.msg }
 		}
 	}

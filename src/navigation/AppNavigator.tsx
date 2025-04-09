@@ -3,7 +3,7 @@ import { createStackNavigator, StackNavigationOptions } from '@react-navigation/
 
 import { COLORS } from '../constants/theme'
 
-import { LevelPlayScreen, LevelStatsScreen, TheoryScreen, LoginScreen } from '../features'
+import { LevelPlayScreen, LevelStatsScreen, TheoryScreen } from '../features'
 
 import MainTabs from './MainTabs'
 import { RootLayout } from './RootLayout'
