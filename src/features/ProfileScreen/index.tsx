@@ -103,9 +103,7 @@ const ProfileScreen = () => {
 				<Text style={styles.profileName}>{username}</Text>
 			</View>
 			<View style={[styles.block, styles.row]}>
-				{/* <Text>{`@${email}`}</Text> */}
-				{/* <Text style={{ fontWeight: '900' }}>·</Text> */}
-				<Text>{`Регистрация: ${parseDate(createdAt)}`}</Text>
+				<Text>{`Дата регистрации: ${parseDate(createdAt)}`}</Text>
 			</View>
 			<View style={[styles.block]}>
 				<Text style={styles.paragraph}>Мои курсы:</Text>

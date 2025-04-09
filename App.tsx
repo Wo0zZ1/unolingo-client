@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView, View } from 'react-native'
 
 import { AppNavigator } from './src/navigation/AppNavigator'
 import { LoadingScreen } from './src/widgets/ui'
@@ -19,21 +19,33 @@ const Layout = () => {
 	if (typeof authState!.authenticated === 'undefined')
 		return <LoadingScreen backBtn={false} title={'Загрузка приложения...'} />
 
-	if (!authState!.authenticated) return <LoginScreen />
+	if (!authState!.authenticated)
+		return (
+			<View style={{ flex: 1, backgroundColor: authState?.authenticated ? '#fff' : '#e8ecf4' }}>
+				<SafeAreaView style={{ flex: 1 }}>
+					<LoginScreen />
+				</SafeAreaView>
+			</View>
+		)
 
 	if (firstRender && fetching) {
 		setTimeout(() => setFirstRender(false), 500)
 		return <LoadingScreen backBtn={false} title={'Загрузка приложения...'} />
 	}
-	return <AppNavigator />
+
+	return (
+		<View style={{ flex: 1, backgroundColor: authState?.authenticated ? '#fff' : '#e8ecf4' }}>
+			<SafeAreaView style={{ flex: 1 }}>
+				<AppNavigator />
+			</SafeAreaView>
+		</View>
+	)
 }
 
 export default function App() {
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
-			<AuthProvider>
-				<Layout />
-			</AuthProvider>
-		</SafeAreaView>
+		<AuthProvider>
+			<Layout />
+		</AuthProvider>
 	)
 }

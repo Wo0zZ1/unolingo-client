@@ -18,8 +18,8 @@ export interface IPressableButtonProps {
 	onPress?: () => void
 	withVibrate?: boolean
 	children: ReactNode
-	bgFront: ColorValue
-	bgBack: ColorValue
+	bgFront?: ColorValue
+	bgBack?: ColorValue
 	borderRadius?: number | string
 	yOffset?: number
 	disabled?: boolean
@@ -32,8 +32,8 @@ const PressableButton = ({
 	onPress = () => {},
 	withVibrate = false,
 	children,
-	bgFront,
-	bgBack,
+	bgFront = COLORS.tomato,
+	bgBack = COLORS.tomatoDark,
 	borderRadius = 8,
 	yOffset = 4,
 	disabled = false,
