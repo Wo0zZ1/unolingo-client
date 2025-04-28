@@ -40,21 +40,18 @@ const LevelMapScreen = memo(() => {
 		fetchMapData(userProgressData.lastSelectedLanguageId)
 	}, [userProgressData.lastSelectedLanguageId, setCurrentSectionIndex])
 
-	const handleScroll = useCallback(
-		(event: { nativeEvent: NativeScrollEvent }) => {
-			if (userProgressFetching || mapDataFetching) return
-			const scrollY = event.nativeEvent.contentOffset.y
-			const newSection = Math.min(
-				Math.max(0, Math.floor((scrollY + height / 6) / (SECTION_HEIGHT + 20))),
-				sections.length,
-			)
-			setCurrentSectionIndex(prev => {
-				if (prev !== newSection) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-				return newSection
-			})
-		},
-		[mapData, height],
-	)
+	const handleScroll = (event: { nativeEvent: NativeScrollEvent }) => {
+		if (userProgressFetching || mapDataFetching) return
+		const scrollY = event.nativeEvent.contentOffset.y
+		const newSection = Math.min(
+			Math.max(0, Math.floor((scrollY + height / 6) / (SECTION_HEIGHT + 20))),
+			sections.length,
+		)
+		setCurrentSectionIndex(prev => {
+			if (prev !== newSection) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+			return newSection
+		})
+	}
 
 	const { userProgresses, lastSelectedLanguageId } = userProgressData
 

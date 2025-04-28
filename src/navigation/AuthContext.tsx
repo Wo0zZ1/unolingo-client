@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios, { AxiosError } from 'axios'
-import { ILanguage } from '../features'
+
 import { LanguageCode } from '../store/useUserStore'
 
 interface IAuthState {
@@ -66,7 +66,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 							return await $api.request(originalRequest)
 						} catch (refreshError) {
 							console.log('Ошибка обновления токена:', refreshError)
-							// if (error.config?.onLogout) error.config.onLogout()
 							return value.onLogout!()
 						}
 					else return value.onLogout!()

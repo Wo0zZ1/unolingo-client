@@ -4,7 +4,7 @@ import { $api } from '../navigation/AuthContext'
 
 export type LanguageCode = 'RU' | 'EN' | 'DE' | 'FR' | 'ES'
 
-export type IUserData = {
+type IUserData = {
 	id: number
 	username: string
 	language: LanguageCode

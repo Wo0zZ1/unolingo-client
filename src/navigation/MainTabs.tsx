@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
@@ -31,6 +31,7 @@ const MainTabs = () => (
 			tabBarIcon: ({ focused, color, size }) => (
 				<Ionicons name={getIconName(route.name, focused)} size={size} color={color} />
 			),
+			animation: 'fade',
 			sceneStyle: { backgroundColor: COLORS.white },
 			tabBarActiveTintColor: 'tomato',
 			tabBarInactiveTintColor: 'gray',
