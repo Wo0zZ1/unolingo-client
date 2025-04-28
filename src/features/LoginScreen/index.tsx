@@ -53,6 +53,8 @@ const LoginScreen = () => {
 	})
 
 	const logIn = async () => {
+		if (!form.username) return alert('Поле имени пользователя не должно быть пустым')
+		if (!form.password) return alert('Поле пароля не должно быть пустым')
 		const result = await onLogin!(form.username, form.password)
 
 		if (result?.error) alert(result.msg)
@@ -60,6 +62,8 @@ const LoginScreen = () => {
 
 	const register = async () => {
 		// TODO IMPLEMENT
+		if (!form.username) return alert('Поле имени пользователя не должно быть пустым')
+		if (!form.password) return alert('Поле пароля не должно быть пустым')
 		const result = await onRegister!(form.username, form.password, 'RU')
 		if (result?.error) alert(result.msg)
 		else logIn()
