@@ -68,8 +68,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 							console.log('Ошибка обновления токена:', refreshError)
 							return value.onLogout!()
 						}
-					else return value.onLogout!()
 				}
+				value.onLogout!()
 				Promise.reject(error)
 			},
 		)

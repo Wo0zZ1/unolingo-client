@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import * as Haptics from 'expo-haptics'
 import { StyleSheet, Text, View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'

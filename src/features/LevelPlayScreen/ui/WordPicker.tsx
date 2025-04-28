@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import CheckButton from './CheckButton'
@@ -17,40 +17,39 @@ interface IWordPickerProps {
 }
 
 const WordPicker = ({ correctAnswer, options, onComplete }: IWordPickerProps) => {
-	const [words, setWords] = useState<IWord[]>(
-		options
-			.map((option, index) => ({ id: index, text: option, selected: false }))
-			.sort((a, b) => a.id - b.id),
-	)
+	const [words, setWords] = useState<IWord[]>([])
 	const [selectedWords, setSelectedWords] = useState<IWord[]>([])
 
-	const handleWordRemove = useCallback(
-		(wordId: number) => {
-			setWords(prev => {
-				const word = words.find(word => word.id === wordId)
-				if (!word) throw new Error("Word doesn't exists")
-				word.selected = false
-				return [...prev.filter(word => word.id !== wordId), word].sort((a, b) => a.id - b.id)
-			})
-			setSelectedWords(prev => prev.filter(word => word.id !== wordId))
-		},
-		[setWords, setSelectedWords],
-	)
+	useEffect(() => {
+		setWords(
+			options
+				.map((option, index) => ({ id: index, text: option, selected: false }))
+				.sort((a, b) => a.id - b.id),
+		)
+		setSelectedWords([])
+	}, [options])
 
-	const handleWordAdd = useCallback(
-		(wordId: number) => {
-			setWords(prev => {
-				const word = words.find(word => word.id === wordId)
-				if (!word) throw new Error("Word doesn't exists")
-				word.selected = true
-				return [...prev.filter(word => word.id !== wordId), word].sort((a, b) => a.id - b.id)
-			})
-			setSelectedWords(prev => [...prev, ...words.filter(word => word.id === wordId)])
-		},
-		[setWords, setSelectedWords],
-	)
+	const handleWordRemove = (wordId: number) => {
+		setWords(prev => {
+			const word = words.find(word => word.id === wordId)
+			if (!word) throw new Error("Word doesn't exist")
+			word.selected = false
+			return [...prev.filter(word => word.id !== wordId), word].sort((a, b) => a.id - b.id)
+		})
+		setSelectedWords(prev => prev.filter(word => word.id !== wordId))
+	}
 
-	const handleSubmit = useCallback(() => {
+	const handleWordAdd = (wordId: number) => {
+		setWords(prev => {
+			const word = words.find(word => word.id === wordId)
+			if (!word) throw new Error("Word doesn't exist")
+			word.selected = true
+			return [...prev.filter(word => word.id !== wordId), word].sort((a, b) => a.id - b.id)
+		})
+		setSelectedWords(prev => [...prev, ...words.filter(word => word.id === wordId)])
+	}
+
+	const handleSubmit = () => {
 		// TODO Выполнить преобразование строки (trim, replace...)
 		onComplete(
 			selectedWords
@@ -58,7 +57,11 @@ const WordPicker = ({ correctAnswer, options, onComplete }: IWordPickerProps) =>
 				.join(' ')
 				.replaceAll(" '", "'") === correctAnswer,
 		)
-	}, [onComplete, words])
+	}
+
+	useEffect(() => {
+		// console.log('RENDER', words)
+	})
 
 	return (
 		<View style={styles.root}>

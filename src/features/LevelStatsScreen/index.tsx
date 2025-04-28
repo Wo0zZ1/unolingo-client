@@ -32,11 +32,8 @@ const LevelStatsScreen = () => {
 	useEffect(() => {
 		if (!levelStatsResponse) {
 			fetchResult(levelStatsData, levelId, levelGlobalOrder)
-			if (userProgressData?.lastSelectedLanguageId) {
-				// TODO ПРОДОЛЖИТЬ
-				console.log(123)
+			if (userProgressData?.lastSelectedLanguageId)
 				fetchMapData(userProgressData.lastSelectedLanguageId)
-			}
 		}
 	}, [])
 

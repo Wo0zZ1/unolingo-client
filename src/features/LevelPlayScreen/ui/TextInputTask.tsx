@@ -1,4 +1,4 @@
-import { memo, useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 
 import { ITaskData } from '../../../store/useTasksStore'
@@ -16,20 +16,24 @@ const TextInputTask = ({ partialAnswer, correctAnswer, onComplete }: ITextInputT
 	const inputRef = useRef<TextInput>(null)
 	const [hiddenInputWidth, setHiddenInputWidth] = useState(0)
 
-	const handleTextPress = useCallback(() => {
+	const handleTextPress = () => {
 		inputRef.current?.focus()
-	}, [])
+	}
 
-	const parseInput = useCallback((str: string) => {
+	useEffect(() => {
+		setInputText('')
+	}, [correctAnswer])
+
+	const parseInput = (str: string) => {
 		return (partialAnswer[0] + ' ' + str + ' ' + partialAnswer[1])
 			.trim()
 			.replaceAll(/ +/g, ' ')
 			.toLowerCase()
-	}, [])
+	}
 
-	const handleSubmit = useCallback(() => {
+	const handleSubmit = () => {
 		onComplete(parseInput(inputText) === correctAnswer.toLowerCase())
-	}, [inputText])
+	}
 
 	return (
 		<View style={styles.root}>
