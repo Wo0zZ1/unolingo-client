@@ -10,7 +10,7 @@ import { LoadingScreen } from '../../widgets/ui'
 
 import { COLORS, SIZES } from '../../constants/theme'
 
-import { useDimensions } from '../../hoocs'
+import { useDimensions } from '../../hooks'
 import { useMapStore } from '../../store/useMapStore'
 import { useUserProgressStore } from '../../store/useUserProgressStore'
 

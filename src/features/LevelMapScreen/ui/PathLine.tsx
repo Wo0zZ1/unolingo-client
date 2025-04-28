@@ -3,29 +3,27 @@ import { StyleSheet } from 'react-native'
 import Svg, { Path } from 'react-native-svg'
 import { generatePath } from '../lib/generatePath'
 
-import { useDimensions } from '../../../hoocs'
+import { useDimensions } from '../../../hooks'
 
 interface IPathLineProps {
 	sectionsCount: number
 	sectionHeight: number
 }
 
-const PathLine = memo(
-	({ sectionHeight, sectionsCount }: IPathLineProps) => {
-		const { width } = useDimensions()
+const PathLine = memo(({ sectionHeight, sectionsCount }: IPathLineProps) => {
+	const { width } = useDimensions()
 
-		return (
-			<Svg height='100%' width='100%' style={styles.path}>
-				<Path
-					d={generatePath(sectionHeight, sectionsCount, width)}
-					fill='none'
-					stroke='tomato'
-					strokeWidth={4}
-				/>
-			</Svg>
-		)
-	},
-)
+	return (
+		<Svg height='100%' width='100%' style={styles.path}>
+			<Path
+				d={generatePath(sectionHeight, sectionsCount, width)}
+				fill='none'
+				stroke='tomato'
+				strokeWidth={4}
+			/>
+		</Svg>
+	)
+})
 
 const styles = StyleSheet.create({
 	path: {

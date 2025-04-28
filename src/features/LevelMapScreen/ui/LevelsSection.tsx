@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import LevelCircle from './LevelCircle'
 import SectionDivider from './SectionDivider'
 
-import { useDimensions } from '../../../hoocs'
+import { useDimensions } from '../../../hooks'
 import { useEffect, useState } from 'react'
 import { $api } from '../../../navigation/AuthContext'
 import { useNavigation } from '@react-navigation/native'
