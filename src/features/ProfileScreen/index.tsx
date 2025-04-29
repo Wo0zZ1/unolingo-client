@@ -23,8 +23,6 @@ import { COLORS } from '../../constants/theme'
 import { useUserProgressStore } from '../../store/useUserProgressStore'
 import { LanguageCode, useUserStore } from '../../store/useUserStore'
 
-// TODO Вынести
-
 export type ILanguage = {
 	id: number
 	name: string

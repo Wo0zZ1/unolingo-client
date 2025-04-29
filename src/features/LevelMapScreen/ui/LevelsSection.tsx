@@ -9,8 +9,7 @@ import { $api } from '../../../navigation/AuthContext'
 import { useNavigation } from '@react-navigation/native'
 import { NavigationProp } from '../../../navigation/types'
 
-// TODO Вынести логику
-export interface ILevel {
+interface ILevel {
 	id: number
 	order: number
 }

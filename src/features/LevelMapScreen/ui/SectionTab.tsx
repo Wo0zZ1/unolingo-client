@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
@@ -26,7 +26,6 @@ const SectionTab = ({ height, chapter, sectionId, sectionName }: ISectionTabProp
 	}, [])
 
 	const theoryPress = useCallback(() => {
-		// TODO Rename to sectionId
 		navigation.navigate('Theory', { theoryId: sectionId })
 	}, [sectionId])
 

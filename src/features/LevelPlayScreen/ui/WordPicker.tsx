@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import CheckButton from './CheckButton'
@@ -50,12 +50,12 @@ const WordPicker = ({ correctAnswer, options, onComplete }: IWordPickerProps) =>
 	}
 
 	const handleSubmit = () => {
-		// TODO Выполнить преобразование строки (trim, replace...)
 		onComplete(
 			selectedWords
 				.map(word => word.text)
 				.join(' ')
-				.replaceAll(" '", "'") === correctAnswer,
+				.toLowerCase()
+				.replaceAll(" '", "'") === correctAnswer.toLowerCase(),
 		)
 	}
 

@@ -112,7 +112,7 @@ const LevelStatsScreen = () => {
 				style={{
 					display: levelUp ? 'flex' : 'none',
 				}}>
-				<Text style={styles.statText}>NEW {level} LEVEL!</Text>
+				<Text style={styles.statText}>Новый {level} уровень!</Text>
 			</View>
 
 			<ContinueButton onPress={handleDone} />

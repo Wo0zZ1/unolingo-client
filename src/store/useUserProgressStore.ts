@@ -12,8 +12,6 @@ export type IUserProgress = {
 }
 
 export type IUserProgressData = {
-	// TODO
-	// userProgresses: Map<number, IUserProgress>
 	userProgresses: IUserProgress[] | null
 	lastSelectedLanguageId: number | null
 }

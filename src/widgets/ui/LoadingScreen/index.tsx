@@ -12,7 +12,6 @@ const LoadingScreen = ({ title, backBtn = true }: ILoadingScreenProps) => {
 		<>
 			<Header backBtn={backBtn} underline={false} />
 			<View style={styles.container}>
-				{/* TODO Переписать на React Node */}
 				<Text style={{ fontSize: 30 }}>{title}</Text>
 			</View>
 		</>
