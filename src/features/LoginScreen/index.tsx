@@ -1,5 +1,13 @@
 import { useEffect, useState } from 'react'
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import {
+	Keyboard,
+	KeyboardAvoidingView,
+	StyleSheet,
+	Text,
+	TextInput,
+	TouchableWithoutFeedback,
+	View,
+} from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
 import { useLeaderboardStore } from '../../store/useLeaderBoardStore'
@@ -70,62 +78,69 @@ const LoginScreen = () => {
 	}
 
 	return (
-		<View style={styles.root}>
-			<View style={styles.header}>
-				<View style={styles.headerIcon}>
-					<Ionicons size={44} color={COLORS.tomato} name='lock-closed'></Ionicons>
-				</View>
-				<Text style={styles.title}>
-					Добро пожаловать в <Text style={{ color: COLORS.tomato }}>Unolingo!</Text>
-				</Text>
-				<Text style={styles.subtitle}>Давай изучать языки вместе</Text>
-			</View>
-
-			<View style={styles.form}>
-				{/* LOGIN */}
-				<View style={styles.input}>
-					<Text style={styles.inputLabel}>Имя</Text>
-					<TextInput
-						autoCapitalize='none'
-						autoCorrect={false}
-						value={form.username}
-						onChangeText={username => setForm(prev => ({ ...prev, username }))}
-						style={styles.inputControl}
-					/>
-				</View>
-				{/* PASSWORD */}
-				<View style={styles.input}>
-					<Text style={styles.inputLabel}>Пароль</Text>
-					<TextInput
-						autoCapitalize='none'
-						autoCorrect={false}
-						value={form.password}
-						onChangeText={password => setForm(prev => ({ ...prev, password }))}
-						style={styles.inputControl}
-					/>
-				</View>
-				<View style={styles.formAction}>
-					<View style={{ alignSelf: 'center', width: '65%' }}>
-						<PressableButton style={styles.btn} withVibrate onPress={logIn}>
-							<Text style={styles.btnText}>Войти</Text>
-						</PressableButton>
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+			<View style={styles.root}>
+				<View style={styles.header}>
+					<View style={styles.headerIcon}>
+						<Ionicons size={44} color={COLORS.tomato} name='lock-closed'></Ionicons>
 					</View>
-					<View style={{ alignSelf: 'center', width: '65%', marginTop: 16 }}>
-						<PressableButton style={styles.btn} withVibrate onPress={register}>
-							<Text style={styles.btnText}>Зарегистрироваться</Text>
-						</PressableButton>
-					</View>
+					<Text style={styles.title}>
+						Добро пожаловать в <Text style={{ color: COLORS.tomato }}>Unolingo!</Text>
+					</Text>
+					<Text style={styles.subtitle}>Давай изучать языки вместе</Text>
 				</View>
+				<KeyboardAvoidingView
+					style={{ width: '100%', marginTop: 24 }}
+					behavior={'padding'}
+					keyboardVerticalOffset={40}>
+					<View style={styles.form}>
+						{/* LOGIN */}
+						<View style={styles.input}>
+							<Text style={styles.inputLabel}>Имя</Text>
+							<TextInput
+								autoCapitalize='none'
+								autoCorrect={false}
+								value={form.username}
+								onChangeText={username => setForm(prev => ({ ...prev, username }))}
+								style={styles.inputControl}
+							/>
+						</View>
+						{/* PASSWORD */}
+						<View style={styles.input}>
+							<Text style={styles.inputLabel}>Пароль</Text>
+							<TextInput
+								autoCapitalize='none'
+								autoCorrect={false}
+								value={form.password}
+								onChangeText={password => setForm(prev => ({ ...prev, password }))}
+								style={styles.inputControl}
+							/>
+						</View>
+						<View style={styles.formAction}>
+							<View style={{ alignSelf: 'center', width: '65%' }}>
+								<PressableButton style={styles.btn} withVibrate onPress={logIn}>
+									<Text style={styles.btnText}>Войти</Text>
+								</PressableButton>
+							</View>
+							<View style={{ alignSelf: 'center', width: '65%', marginTop: 16 }}>
+								<PressableButton style={styles.btn} withVibrate onPress={register}>
+									<Text style={styles.btnText}>Зарегистрироваться</Text>
+								</PressableButton>
+							</View>
+						</View>
+					</View>
+				</KeyboardAvoidingView>
 			</View>
-		</View>
+		</TouchableWithoutFeedback>
 	)
 }
 
 const styles = StyleSheet.create({
 	root: {
 		flex: 1,
+		display: 'flex',
+		justifyContent: 'center',
 		padding: 24,
-		backgroundColor: '#e8ecf4',
 	},
 	header: {
 		marginVertical: 36,
@@ -155,7 +170,6 @@ const styles = StyleSheet.create({
 	},
 	form: {
 		marginBottom: 24,
-		flex: 1,
 	},
 	input: {
 		marginBottom: 16,
