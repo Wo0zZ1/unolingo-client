@@ -40,6 +40,7 @@ const LevelPlayScreen = memo(() => {
 	}, [tasksFetching])
 
 	const [currentTaskIndex, setCurrentTaskIndex] = useState<number>(1)
+	const [currentCountError, setCurrentCountError] = useState<number>(0)
 
 	if (!tasksData || tasksFetching) return <LoadingScreen title='Загрузка уровня...' />
 
@@ -57,9 +58,13 @@ const LevelPlayScreen = memo(() => {
 					tasksLength: tasksData.length,
 				})
 			} else setCurrentTaskIndex(prev => prev + 1)
+			setCurrentCountError(0)
 		} else {
+			setCurrentCountError(prev => prev + 1)
 			incrementErrors()
-			alert('Неправильно, попробуйте еще раз!')
+			// После 3 ошибки говорим правильный ответ
+			if (currentCountError + 1 >= 3) alert(`Правильный ответ: ${currentTask.correctAnswer}`)
+			else alert('Неправильно, попробуйте еще раз!')
 		}
 	}
 
