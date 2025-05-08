@@ -73,12 +73,6 @@ const LevelStatsScreen = () => {
 	const errorPercentage = Math.min(1, errors / tasksLength) * 100
 	const timeSpent = (endTime! - startTime!) / 1000
 
-	console.log('experience:', experience)
-	console.log('experienceToNextLevel:', experienceToNextLevel)
-	console.log('levelUp:', levelUp)
-	console.log('errors:', errors)
-	console.log('level:', level)
-
 	return (
 		<View style={styles.root}>
 			<Text style={styles.title}>Статистика прохождения уровня</Text>

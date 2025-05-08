@@ -32,6 +32,10 @@ const MainTabs = () => (
 				<Ionicons name={getIconName(route.name, focused)} size={size} color={color} />
 			),
 			animation: 'fade',
+			headerShown: false,
+			gestureEnabled: false,
+			freezeOnBlur: true,
+			cardStyle: { backgroundColor: COLORS.white },
 			sceneStyle: { backgroundColor: COLORS.white },
 			tabBarActiveTintColor: 'tomato',
 			tabBarInactiveTintColor: 'gray',

@@ -59,10 +59,6 @@ const WordPicker = ({ correctAnswer, options, onComplete }: IWordPickerProps) =>
 		)
 	}
 
-	useEffect(() => {
-		// console.log('RENDER', words)
-	})
-
 	return (
 		<View style={styles.root}>
 			{/* Область для выбранных слов */}

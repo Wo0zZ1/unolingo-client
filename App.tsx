@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { SafeAreaView, View } from 'react-native'
+import { Platform, SafeAreaView, StatusBar, View } from 'react-native'
 
 import { AppNavigator } from './src/navigation/AppNavigator'
 import { LoadingScreen } from './src/widgets/ui'
@@ -35,7 +35,12 @@ const Layout = () => {
 
 	return (
 		<View style={{ flex: 1, backgroundColor: authState?.authenticated ? '#fff' : '#e8ecf4' }}>
-			<SafeAreaView style={{ flex: 1 }}>
+			<SafeAreaView
+				style={{
+					flex: 1,
+					backgroundColor: 'white',
+					paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+				}}>
 				<AppNavigator />
 			</SafeAreaView>
 		</View>

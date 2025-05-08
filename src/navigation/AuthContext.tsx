@@ -19,8 +19,6 @@ interface AuthProps {
 const TOKEN_KEY = 'jwt'
 const AuthContext = createContext<AuthProps>({})
 
-console.log(process.env.EXPO_PUBLIC_API_URL + '/')
-
 export const $api = axios.create({
 	withCredentials: true,
 	baseURL: process.env.EXPO_PUBLIC_API_URL + '/',
@@ -39,7 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	useEffect(() => {
 		const interceprotId = $api.interceptors.response.use(
 			config => {
-				console.log(`URL: ${config.config.url}:`, config.data)
+				// console.log(`URL: ${config.config.url}:`, config.data)
 				return config
 			},
 			async error => {
@@ -51,7 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 					if (originalRequest && !originalRequest._isRetry)
 						try {
 							originalRequest._isRetry = true
-							console.log(`URL: ${process.env.EXPO_PUBLIC_API_URL}/api/auth/refresh`)
+							// console.log(`URL: ${process.env.EXPO_PUBLIC_API_URL}/api/auth/refresh`)
 							const response = await axios.post(
 								`${process.env.EXPO_PUBLIC_API_URL}/api/auth/refresh`,
 								{},
@@ -59,7 +57,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 									withCredentials: true,
 								},
 							)
-							console.log(`Новый рефреш токен: ${response.data.accessToken}`)
+							// console.log(`Новый рефреш токен: ${response.data.accessToken}`)
 							await AsyncStorage.setItem(TOKEN_KEY, response.data.accessToken)
 							originalRequest.headers.Authorization = `Bearer ${response.data.accessToken}`
 							$api.defaults.headers.common.Authorization = `Bearer ${response.data.accessToken}`
@@ -120,7 +118,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 	const login = async (login: string, password: string) => {
 		try {
-			console.log(`URL: ${process.env.EXPO_PUBLIC_API_URL}/api/auth/login`)
+			// console.log(`URL: ${process.env.EXPO_PUBLIC_API_URL}/api/auth/login`)
 
 			const result = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/api/auth/login`, {
 				username: login,
@@ -141,7 +139,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 			if (error instanceof AxiosError) {
 				if (error.status === 401) return { error: true, msg: 'Неправильный логин или пароль' }
 			}
-			console.log('ошибка:', error)
 			return { error: true, msg: error as any }
 		}
 	}
@@ -154,7 +151,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 				token: null,
 				authenticated: false,
 			})
-			console.log(`URL: ${process.env.EXPO_PUBLIC_API_URL}/api/auth/logout`)
 			const response = await axios.post(
 				`${process.env.EXPO_PUBLIC_API_URL}/api/auth/logout`,
 				{},
@@ -162,7 +158,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 					withCredentials: true,
 				},
 			)
-			console.log(`Результат выхода из аккаунта: ${response.data}`)
 		} catch (error) {
 			console.log('ошибка:', error)
 			return { error: true, msg: (error as any).response.data.msg }

@@ -1,5 +1,12 @@
 import { memo, useEffect, useState } from 'react'
-import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native'
+import {
+	Keyboard,
+	KeyboardAvoidingView,
+	Platform,
+	StyleSheet,
+	TouchableWithoutFeedback,
+	View,
+} from 'react-native'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import type { RootStackParamList } from '../../navigation/types'
@@ -57,39 +64,41 @@ const LevelPlayScreen = memo(() => {
 	}
 
 	return (
-		<>
-			<Header>
-				<ProgressBar
-					style={styles.bar}
-					from={(currentTaskIndex - 2) / tasksData.length}
-					to={(currentTaskIndex - 1) / tasksData.length}
-				/>
-			</Header>
-			<View style={styles.container}>
-				{/* Содержимое вопроса */}
-				<TaskQuestion type={currentTask.type} question={currentTask.question} />
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+			<View style={{ flex: 1 }}>
+				<Header>
+					<ProgressBar
+						style={styles.bar}
+						from={(currentTaskIndex - 2) / tasksData.length}
+						to={(currentTaskIndex - 1) / tasksData.length}
+					/>
+				</Header>
+				<View style={styles.container}>
+					{/* Содержимое вопроса */}
+					<TaskQuestion type={currentTask.type} question={currentTask.question} />
 
-				{/* Форма ответа */}
-				<KeyboardAvoidingView
-					style={styles.content}
-					behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-					keyboardVerticalOffset={120}>
-					{currentTask.type === 'WORD_PICKER' ? (
-						<WordPicker
-							options={currentTask.options}
-							correctAnswer={currentTask.correctAnswer}
-							onComplete={handleTaskComplete}
-						/>
-					) : (
-						<TextInputTask
-							partialAnswer={currentTask.partialAnswer}
-							correctAnswer={currentTask.correctAnswer}
-							onComplete={handleTaskComplete}
-						/>
-					)}
-				</KeyboardAvoidingView>
+					{/* Форма ответа */}
+					<KeyboardAvoidingView
+						style={styles.content}
+						behavior={'padding'}
+						keyboardVerticalOffset={120}>
+						{currentTask.type === 'WORD_PICKER' ? (
+							<WordPicker
+								options={currentTask.options}
+								correctAnswer={currentTask.correctAnswer}
+								onComplete={handleTaskComplete}
+							/>
+						) : (
+							<TextInputTask
+								partialAnswer={currentTask.partialAnswer}
+								correctAnswer={currentTask.correctAnswer}
+								onComplete={handleTaskComplete}
+							/>
+						)}
+					</KeyboardAvoidingView>
+				</View>
 			</View>
-		</>
+		</TouchableWithoutFeedback>
 	)
 })
 
@@ -99,7 +108,7 @@ export const styles = StyleSheet.create({
 		position: 'relative',
 		justifyContent: 'center',
 		alignItems: 'center',
-		paddingHorizontal: 20,
+		padding: 20,
 	},
 	bar: {
 		marginLeft: 20,

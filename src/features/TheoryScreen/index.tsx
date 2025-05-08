@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import { FlatList, ListRenderItemInfo, StyleSheet } from 'react-native'
+import { FlatList, ListRenderItemInfo, StyleSheet, View } from 'react-native'
 
 import { Empty, Separator, TheoryBlock } from './ui'
 
@@ -28,7 +28,7 @@ const TheoryScreen = () => {
 	if (!theoryData) return <LoadingScreen title={'Загрузка теории...'} />
 
 	return (
-		<>
+		<View style={{ flex: 1 }}>
 			<Header underline={true} title={theoryData.title} />
 			<FlatList
 				contentContainerStyle={styles.container}
@@ -38,7 +38,7 @@ const TheoryScreen = () => {
 				renderItem={renderTheoryBlock}
 				ItemSeparatorComponent={Separator}
 			/>
-		</>
+		</View>
 	)
 }
 
